@@ -8,10 +8,10 @@ const Navbar = () => {
         <li><Link to="/">Home</Link></li>
         <li><Link to="/booking">Booking</Link></li>
         <li><Link to="/reservations">Reservations</Link></li>
-        <li><Link to="/about">About</Link></li>
+        <li><Link to="/gallery">Photo Gallery</Link></li>
+        <li><Link to="/saco-river">Saco River Tubing</Link></li>
         <li><Link to="/contact">Contact</Link></li>
-        <li><Link to="/todo">ToDo</Link></li>
-        <li><Link to="/test">Test</Link></li>
+        <li><Link to="/about">About</Link></li>
       </ul>
     </nav>
   );
