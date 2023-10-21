@@ -1,0 +1,23 @@
+Front End:
+
+Booking Logic:
+- Load available dates:
+- Load already booked dates
+- Subtract booked dates from available dates
+- create function for "disabled dates"
+- user selected dates populate booking form
+- additional form fields must be populated by user
+- Request book button creates a db submission
+- automatically notification to for admins via email
+- re-direct to booking(s) summary page
+
+Testing:
+
+Expected input format for isDateDisabled func, should test the API return
+and ideally confirm the not available dates cannot be booked by an end user
+if they were to try.
+
+const allowedRanges = [
+   {start: new Date(2023, 9, 18), end: new Date(2023, 9, 20)},
+   {start: new Date(2023, 10, 23), end: new Date(2023, 10, 25)}
+];
