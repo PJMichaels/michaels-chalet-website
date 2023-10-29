@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    command: python manage.py runserver 0.0.0.0:8000
+
+# not sure that the port configuration is correct for aws deployment
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile.prod
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/frontend
+    stdin_open: true
