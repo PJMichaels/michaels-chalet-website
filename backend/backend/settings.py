@@ -126,10 +126,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# I think this a bad version based on my post not working
-# CORS_ORIGIN_WHITELIST = [
-#      'http://localhost:3000'
-# ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # If your React app runs on this port
