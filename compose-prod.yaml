@@ -4,20 +4,17 @@ services:
   backend:
     build: 
       context: ./backend
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.prod
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/backend
-    command: python manage.py runserver 0.0.0.0:8000
+    # normally this is just the run server command. Possibly change to a custom .sh script later on
+    command: /bin/bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
 
 # not sure that the port configuration is correct for aws deployment
-  frontend:
+  frontend-prod:
     build: 
       context: ./frontend
       dockerfile: ./Dockerfile.prod
     ports:
       - "3000:80"
-    volumes:
-      - ./frontend:/frontend
     stdin_open: true
