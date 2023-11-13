@@ -1,15 +1,13 @@
-# Use an official Node runtime as a base image
-FROM node:14
+FROM node:lts-alpine as build 
 
-# Set the working directory
-WORKDIR /frontend
+WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json /frontend/
-RUN npm install
+COPY package.json .
+RUN npm install 
+COPY . .
+RUN npm run build
 
-# Copy the current directory contents into the container
-COPY . /frontend/
+FROM nginx
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf 
 
-# Start the app
-CMD ["npm", "start"]
+COPY --from=build /app/build /usr/share/nginx/html 
