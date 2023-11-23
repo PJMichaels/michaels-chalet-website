@@ -7,14 +7,22 @@ services:
       dockerfile: ./Dockerfile.prod
     ports:
       - "8000:8000"
+    # add logging config for console output in AWS
+    # logging:
+    #   driver: awslogs
+    #   options:
+    #     awslogs-group: michaels-chalet-app
+    #     awslogs-region: us-east-1
+    #     awslogs-stream-prefix: backend
     # normally this is just the run server command. Possibly change to a custom .sh script later on
-    command: /bin/bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # command: /bin/bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # command: /bin/bash -c "python manage.py migrate"
 
 # not sure that the port configuration is correct for aws deployment
-  frontend-prod:
+  frontend:
     build: 
       context: ./frontend
       dockerfile: ./Dockerfile.prod
     ports:
-      - "3000:80"
+      - "80:80"
     stdin_open: true
