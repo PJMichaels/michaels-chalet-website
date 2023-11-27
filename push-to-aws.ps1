@@ -1,13 +1,13 @@
 # get authentication token
-aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 120244965420.dkr.ecr.us-east-2.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 120244965420.dkr.ecr.us-east-1.amazonaws.com
 
-# ensure the build is current
-docker compose -f ./compose-prod build
+# build images
+docker compose -f .\compose-prod.yaml build
 
 # Create tag names on images
-docker tag michaels-chalet-website-frontend-prod:latest 120244965420.dkr.ecr.us-east-2.amazonaws.com/michaels-chalet-app-frontend
-docker tag michaels-chalet-website-backend-prod:latest 120244965420.dkr.ecr.us-east-2.amazonaws.com/michaels-chalet-app-backend
+docker tag michaels-chalet-frontend:latest 120244965420.dkr.ecr.us-east-1.amazonaws.com/michaels-chalet-frontend:latest
+docker tag michaels-chalet-backend:latest 120244965420.dkr.ecr.us-east-1.amazonaws.com/michaels-chalet-backend:latest
 
 # Push images to ECR registry
-docker push 120244965420.dkr.ecr.us-east-2.amazonaws.com/michaels-chalet-app-frontend:latest
-docker push 120244965420.dkr.ecr.us-east-2.amazonaws.com/michaels-chalet-app-backend:latest
+docker push 120244965420.dkr.ecr.us-east-1.amazonaws.com/michaels-chalet-frontend:latest
+docker push 120244965420.dkr.ecr.us-east-1.amazonaws.com/michaels-chalet-backend:latest

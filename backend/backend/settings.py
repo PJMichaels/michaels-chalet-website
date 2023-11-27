@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)o9c4c8kp7)q(!&d2tjk1tz2ol+m(80b&=62lif-dqp@os^0xy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['backend', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['backend', 'localhost', '127.0.0.1', "*"]
 
 # Application definition
 
@@ -129,4 +129,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # If your React app runs on this port
+    "http://localhost:80",  # Adding to see if this fixes comms locally
+    "http://127.0.0.1:80", # not sure which will work on AWS
+    "http://127.0.0.1:3000", # not sure which will work on AWS
 ]
