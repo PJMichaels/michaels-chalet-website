@@ -1,37 +1,34 @@
-import axios from "axios";
 
-const getObservationData = (observationURL) => {
-  var responseData = null;
-  responseData = axios.get(observationURL).then((response) => {
-  return response.data;});
+// This function accesses river IoT sensor data to provide current river conditions
 
-return responseData;
-}
+// Water Data API Docs https://waterdata.usgs.gov/blog/api_catalog/
+// IoT API Docs: https://docs.ogc.org/is/15-078r6/15-078r6.html#31
 
-  const getRiverData = async() => {
-    const dataStreamsURL = "https://labs.waterdata.usgs.gov/sta/v1.1/Things('USGS-01064500')/Datastreams";
-    var observationLinks = null;
-    // var result = {};
+const getRiverData = async() => {
     
-    try {
-      observationLinks = await axios.get(dataStreamsURL).then((response) => {
-        response.data.value.map((item) => [item["description"].split("/")[0], item["Observations@iot.navigationLink"]])});
-    }
-    catch (error) {
-      console.error('Error fetching data: ', error);
-      return null;
-    }
+  const dataStreamsURL = "https://labs.waterdata.usgs.gov/sta/v1.1/Things('USGS-01064500')/Datastreams";
+  var observations = {};
+  var observationLinks = [];
 
-    // if (observationLinks) {
-    //    observationLinks.forEach((dataStream) => {
-    //     result[dataStream[0]] = getObservationData(dataStream[1]).then((response) => {return response;});
-    //    })
-    // }
+  observationLinks = await fetch(dataStreamsURL).then(
+    res => res.json());
 
-    console.log(observationLinks);
-    return observationLinks;
-    // return result;
-  };
+  observationLinks = observationLinks.value;
+  
+  for (let i = 0; i < observationLinks.length; i++) {
+    const observation = await fetch((observationLinks[i]['Observations@iot.navigationLink'] + "?$orderby=phenomenonTime desc&$top=1")).then(res => res.json());
+    const label = observationLinks[i]["description"].split(" /")[0];
+    observations[label] = observation;
+  }
+
+  return (
+    [
+    ['Air Temperature', observations["Temperature, air, degrees Fahrenheit"]['value'][0]['result'] + ' degrees F'],
+    ['Flow Rate', observations['Discharge']['value'][0]['result'] + ' cubic feet per second'],
+    ['Guage Height', observations['Gage height']['value'][0]['result'] + ' feet']
+    ]
+      );
+};
 
 
 export default getRiverData;

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import getRiverData from '../funcs/getRiverData';
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-// import getRiverData from '../funcs/getRiverData';
 
-const dataStreamsURL = "https://labs.waterdata.usgs.gov/sta/v1.1/Things('USGS-01064500')/Datastreams";
 
 // const riverLatitude = 44.040561;
 // const riverLongitude = -71.132496;
@@ -12,36 +10,14 @@ const dataStreamsURL = "https://labs.waterdata.usgs.gov/sta/v1.1/Things('USGS-01
 // ];
 
 
-// const data = getRiverData().toString();
-// const [riverSpeed, setRiverSpeed] = useState([]);
-
-  // this code actually populates variables
-
-// const getWaterDataStreamInfoWithAxios = async () => {
-//   const response = await axios.get(dataStreamAPI);
-//   setRiverData(response.data);
-
-
 const FloatPage = () => {
 
-  const [dataStreams, setDataStreams] = useState({});
-
-
-  const getWaterDataStreamInfoWithAxios = () => {
-    const observationLinks = axios.get(dataStreamsURL).then(
-      (response) => {
-        return response.data.value.map(
-          (item) => [item["description"].split("/")[0], axios.get(item["Observations@iot.navigationLink"]).then((response) => {return response.data;})]);
-      }
-    )
-
-    return observationLinks;
-  };
-
+  // Set and update variable for real time river data
+  const [dataStreams, setDataStreams] = useState([]);
 
   useEffect(() => {
-    const fetchData = async() => { 
-    const result = await getWaterDataStreamInfoWithAxios();
+    const fetchData = async() => {
+    const result = await getRiverData();
     setDataStreams(result);
     };
 
@@ -57,9 +33,14 @@ const FloatPage = () => {
         details, entry and exit points, river speed vs float time,
         recommended gear, etc..
       </p>
-      <p>
-        {JSON.stringify(dataStreams)}
-      </p>
+      <h2> Current River Conditions in at Conway, NH Sensor</h2>
+        <ul>
+          {dataStreams.map((measurement) => 
+          <li>
+            {measurement[0]}: {measurement[1]}
+          </li>
+          )}
+        </ul>
     </div>
   );
 };
