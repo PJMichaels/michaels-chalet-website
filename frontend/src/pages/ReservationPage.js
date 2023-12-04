@@ -17,7 +17,7 @@ const ReservationPage = () => {
                 setBookingData(response.data);
             })
             .catch((err) => {
-              bookingError(err.toString());
+              setBookedAPIError(err.toString());
             });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
