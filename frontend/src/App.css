@@ -2,7 +2,9 @@ body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     /* background-image: url('/path-to-your-mountain-image.jpg'); */
-    background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/a8/55/6a/new-england-foliage-colors.jpg?w=900&h=-1&s=1');
+    /* background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/19/a8/55/6a/new-england-foliage-colors.jpg?w=900&h=-1&s=1'); */
+    background-image: url('https://qcexclusive.com/wp-content/uploads/2016/12/white_mountains-1024x640.jpg');
+    
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -74,4 +76,14 @@ p {
 .button:hover {
     background-color: white;
     color: black;
+}
+
+
+.content-container {
+    background: rgba(44, 62, 80, 0.85); /* Darker shade with opacity */
+    color: #ecf0f1; /* Light text color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto; /* centers the container */
 }
