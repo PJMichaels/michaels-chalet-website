@@ -19,7 +19,7 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/availability" element={<AvailabilityPage />} />
+        <Route path="/lp-admin" element={<AvailabilityPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/reservations" element={<ReservationPage />} />
         <Route path="/saco-river" element={<FloatPage />} />
