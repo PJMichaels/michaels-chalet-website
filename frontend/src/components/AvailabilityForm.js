@@ -10,6 +10,8 @@ const AvailabilityForm = ({start_date, end_date}) => {
         reason: "",
     });
 
+
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -33,8 +35,9 @@ const AvailabilityForm = ({start_date, end_date}) => {
 
 const navigate = useNavigate();
 
-  const redirectToPage = () => {
-    navigate('/booking/');}
+function refreshPage() {
+    window.location.reload(false);
+  }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -46,7 +49,7 @@ const navigate = useNavigate();
         })
             .then((response) => {
                 console.log(response.data);
-                redirectToPage();
+                refreshPage();
             })
             .catch((error) => {
                 // This error should really be in a modal long term
