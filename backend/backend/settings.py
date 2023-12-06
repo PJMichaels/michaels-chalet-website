@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'todo',
     'chaletsync',
-    'authentication',
+    'authentification',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
