@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './ImageSlider.css';
 
 
 class ImageSlider extends Component {

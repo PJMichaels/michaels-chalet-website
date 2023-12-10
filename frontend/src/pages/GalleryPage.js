@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageGallery from 'react-image-gallery';
 import { images } from '../data/gallery-images';
+import './GalleryPage.css';
 
 const GalleryPage = () => {
   return (
