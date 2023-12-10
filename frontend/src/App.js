@@ -10,6 +10,8 @@ import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
 import ToDoPage from './pages/ToDoPage';
 import TestPage from './pages/TestPage';
+import Login from './components/Login';
+import Logout from './components/Logout';
 import Navbar from './components/Navbar';
 import './App.css';
 
@@ -19,6 +21,8 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/logout" element={<Logout/>} />
         <Route path="/lp-admin" element={<AvailabilityPage />} />
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/reservations" element={<ReservationPage />} />
