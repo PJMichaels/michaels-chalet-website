@@ -8,7 +8,6 @@ import FloatPage from './pages/FloatPage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 import AboutPage from './pages/AboutPage';
-import ToDoPage from './pages/ToDoPage';
 import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
@@ -30,7 +29,6 @@ const App = () => {
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/todo" element={<ToDoPage />} />
         <Route path="/test" element={<TestPage />} />
       </Routes>
     </Router>
