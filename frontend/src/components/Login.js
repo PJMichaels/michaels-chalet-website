@@ -14,7 +14,6 @@ const Login = () => {
         const user = { username, password };
 
         try {
-            // Create the POST request
             const { data } = await axios.post(
                 '/api/token/',
                 user,
@@ -30,6 +29,8 @@ const Login = () => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
 
             navigate('/'); // Navigate to home page on successful login
+
+            
         } catch (error) {
             // Handle login error (e.g., incorrect credentials, server issue)
             console.error('Login error', error);
