@@ -7,15 +7,6 @@ import {
   useLocation
 } from 'react-router-dom';
 
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link,
-//   Redirect,
-//   useHistory,
-//   useLocation
-// } from "react-router-dom";
 import HomePage from './pages/HomePage';
 import AvailabilityPage from './pages/AvailabilityPage';
 import BookingPage from './pages/BookingPage';
