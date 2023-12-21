@@ -11,6 +11,7 @@ const StayInfoPage = () => {
         <li>Thermostat Settings</li>
         <li>Wifi Info</li>
         <li>Pellet Stove Info</li>
+        <li>Water Main..</li> 
         <li>Coffee Maker Instructions</li>
         <li>Using the public beach</li>
         <li>Recommended Hikes</li>
