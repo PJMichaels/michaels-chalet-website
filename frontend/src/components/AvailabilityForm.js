@@ -33,8 +33,6 @@ const AvailabilityForm = ({start_date, end_date}) => {
         return [year, month, day].join('-');
     }
 
-const navigate = useNavigate();
-
 function refreshPage() {
     window.location.reload(false);
   }
