@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from chaletsync import views as chaletsyncviews
-from authentification import views as authentificationviews
+from authentication import views as authenticationviews
 from rest_framework_simplejwt import views as jwt_views
 
 router = routers.DefaultRouter()
@@ -34,6 +34,6 @@ urlpatterns = [
      path('api/token/refresh/', 
           jwt_views.TokenRefreshView.as_view(), 
           name ='token_refresh'),
-    path('', include('authentification.urls')),
-    path('api/logout/', authentificationviews.LogoutView.as_view(), name ='logout'),
+    path('', include('authentication.urls')),
+    path('api/logout/', authenticationviews.LogoutView.as_view(), name ='logout'),
 ]
