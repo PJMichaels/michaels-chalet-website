@@ -1,33 +1,20 @@
-import React from 'react';
-import {useEffect, useState} from "react"
-import axios from "axios";
+// Logout.js
 
-const Logout = () => {    
-    
+import React, { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext'; // Import useAuth from your AuthContext
+
+const Logout = () => {
+    const { logout } = useAuth(); // Get the logout function from the context
+
     useEffect(() => {
-               (async () => {         
-                try {
-                    const {data} = await  
-                    axios.post('/api/logout/',{
-                    refresh_token:localStorage.getItem('refresh_token')
-                    } ,{
-                        headers: {'Content-Type': 'application/json'},
-                        withCredentials: true
-                    });           
-                
-                localStorage.clear();
-                axios.defaults.headers.common['Authorization'] = null;
-                // window.location.href = '/api/login'
-                window.location.href = '/'
-                } catch (e) {
-                console.log('logout not working', e)
-                }
-            })();
-        }, []);    
-        
-        return (
-       <div></div>
-     )
-}
+        // Call the logout function from the context when the component is rendered
+        logout();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // The empty dependency array ensures this effect runs only once on mount
+
+    return (
+        <div>Logging out...</div> // You can add a spinner or message here if you like
+    );
+};
 
 export default Logout;

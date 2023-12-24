@@ -1,38 +1,30 @@
-import React from 'react';
-import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { useAuth } from '../context/AuthContext'; // Import useAuth from your AuthContext
+
 
 const Login = () => {     
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');     
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate();
+    const location = useLocation();
+    const auth = useAuth(); // Use the useAuth hook to access your context
+
+    // Extract the 'from' location from the state or default to the root
+    const from = location.state?.from?.pathname || '/';
 
     // Create the submit method.
     const submit = async e => {
         e.preventDefault();          
-        const user = { username, password };
 
         try {
-            const { data } = await axios.post(
-                '/api/token/',
-                user,
-                {
-                    headers: {'Content-Type': 'application/json'},
-                    withCredentials: true
-                }
-            );
+            // Use the login function from your AuthContext
+            await auth.login(username, password);
 
-            // Initialize the access & refresh token in localstorage.
-            localStorage.setItem('access_token', data.access);         
-            localStorage.setItem('refresh_token', data.refresh);         
-            axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
-
-            navigate('/'); // Navigate to home page on successful login
-
+            // Navigate to the previous page or to the home page if no previous page is found
+            navigate(from, { replace: true });
             
         } catch (error) {
-            // Handle login error (e.g., incorrect credentials, server issue)
             console.error('Login error', error);
             // Potentially update the state to show an error message to the user
         }    

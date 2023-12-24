@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+// import React, { useState, useEffect } from 'react';
 import { 
   BrowserRouter as Router, 
   Route, 
   Routes,
-  Navigate,
-  useLocation
 } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
@@ -20,60 +19,56 @@ import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute';
+import {useAuth, AuthProvider} from './context/AuthContext'
 import './App.css';
 import CheckoutListPage from './pages/CheckoutListPage';
 
-const App = () => {
 
-  // set authentication variable
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuth, setIsAuth] = useState(false);
-  
-  // check for local access token
-  useEffect(() => {
-    const checkAuthStatus = async () => {
-      const token = localStorage.getItem('access_token');
-      setIsAuth(token !== null);
-      setIsLoading(false); // Set loading to false once the check is complete
-    };
-  
-    checkAuthStatus();
-  }, []);
+function AppContent() {
+  const { isLoading } = useAuth(); // Use the isLoading state from the context
 
-  return (
-    <Router>
-      {/* {isAuth ? <Navbar /> : <Login/>} */}
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/logout" element={<Logout/>} />
-        <Route path="/lp-admin" element={<PrivateRoute Page = {AvailabilityPage} auth = {isAuth} loading = {isLoading} />} />
-        <Route path="/booking" element={<BookingPage />} />
-        <Route path="/reservations" element={<ReservationPage />} />
-        <Route path="/saco-river" element={<FloatPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/test" element={<TestPage />} />
-        <Route path="/checkout" element={<CheckoutListPage />} />
-        <Route path="/stayinfo" element={<StayInfoPage />} />
-      </Routes>
-    </Router>
-  );
-};
-
-export default App;
-
-
-function PrivateRoute({Page, auth , loading}) {
-  const location = useLocation(); // Hook to access the current location
-  
-  if (loading) {
-    return <div>Loading...</div>; // Or a spinner
+  if (isLoading) {
+      // Show a loading indicator while checking the user's authentication status
+      return <div>Loading...</div>; // Or a more elaborate spinner/indicator
   }
+
   return (
-    auth ? <Page/> : 
-    <Navigate to="/login" />
+      <Routes>
+          {/* Public routes that don't require authentication */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/logout" element={<Logout/>} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/reservations" element={<ReservationPage />} />
+          <Route path="/saco-river" element={<FloatPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/test" element={<TestPage />} />
+          <Route path="/checkout" element={<CheckoutListPage />} />
+          <Route path="/stayinfo" element={<StayInfoPage />} />
+
+          {/* Protected routes that require authentication */}
+          <Route path="/lp-admin" element={
+              <PrivateRoute>
+                  <AvailabilityPage />
+              </PrivateRoute>
+          } />
+          {/* Add more protected routes as needed here */}
+      </Routes>
   );
 }
+
+function App() {
+  return (
+      <AuthProvider> {/* Provide the authentication context to the entire app */}
+          <Router>
+              <Navbar /> {/* Navbar is placed here to be visible on all routes */}
+              <AppContent /> {/* Separated component to use useAuth hook */}
+          </Router>
+      </AuthProvider>
+  );
+}
+
+export default App;
