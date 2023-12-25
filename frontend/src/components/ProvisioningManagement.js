@@ -1,35 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './ReservationPage.css'
 
-const ReservationPage = () => {
+const ProvisioningManagement = () => {
 
 // variables for booking data to be stored or error states
     // from booking data, then assign values to those variables
-    const [bookedDates, setBookingData] = useState([]);
-    const [bookingError, setBookedAPIError] = useState(null);
+    const [availabilityData, setAvailabilityData] = useState([]);
+    const [responseError, setResponseError] = useState(null);
 
     // this code actually populates variables
     useEffect(() => {
         // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/bookings/')
+        axios.get('/api/available/')
             .then((response) => {
-                setBookingData(response.data);
+                setAvailabilityData(response.data);
             })
             .catch((err) => {
-              setBookedAPIError(err.toString());
+                setResponseError(err.toString());
             });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-    const deleteBooking = (id) => {
-      axios.delete(`/api/bookings/${id}/`)
+    const deleteProvisioned = (id) => {
+      axios.delete(`/api/available/${id}/`)
           .then(() => {
               // Remove the deleted booking from the state
-              const updatedBookings = bookedDates.filter(booking => booking.id !== id);
-              setBookingData(updatedBookings);
+              const updatedAvailability = availabilityData.filter(item => item.id !== id);
+              setAvailabilityData(updatedAvailability);
           })
           .catch(err => {
-              setBookedAPIError(err.toString());
+            setResponseError(err.toString());
           });
   };
   
@@ -38,35 +37,34 @@ const ReservationPage = () => {
     return (
       <div className='reservations-container'>
           <div className='reservations-header'>
-              <h1>Booking Data</h1>
+              <h1>Provisioned Dates</h1>
           </div>
-          {bookingError && <p className="error">Error: {bookingError}</p>}
-          {bookedDates.length > 0 ? (
+          {responseError && <p className="error">Error: {responseError}</p>}
+          {availabilityData.length > 0 ? (
               <ul>
-                  {bookedDates.map((booking, index) => (
+                  {availabilityData.map((item, index) => (
                     
-                      <li key={booking.id}>
+                      <li key={item.id}>
                         <div className='bookingItem'>
                           <div className='bookingLeftSide'>
-                            <h2>{booking.name}</h2>
-                            <p>Booking Dates: {booking.start_date} - {booking.end_date}</p>
-                            <p>Group Size: {booking.group_size}</p>
+                            <h2>{item.name}</h2>
+                            <p>Provisioned Dates: {item.start_date} - {item.end_date}</p>
                           </div>
                           <div className='bookingRightSide'>
-                            <p>Message: <br></br>{booking.note}</p>
+                            <p>Reason: <br></br>{item.reason}</p>
                             {/* Add other booking details you'd like to display here */}
                           </div>
-                          <button onClick={() => deleteBooking(booking.id)}>Delete</button>
+                          <button onClick={() => deleteProvisioned(item.id)}>Delete</button>
                         </div>
                       </li>
                     
                   ))}
               </ul>
           ) : (
-              <p className="no-bookings">No bookings available.</p>
+              <p className="no-bookings">No Provisioned Dates.</p>
           )}
       </div>
   );
 };
 
-export default ReservationPage;
+export default ProvisioningManagement;

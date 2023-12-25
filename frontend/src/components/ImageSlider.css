@@ -1,0 +1,21 @@
+/* Adjusting ImageGallery component */
+.image-gallery .image-gallery-left-nav,
+.image-gallery .image-gallery-right-nav {
+  font-size: 24px; /* Adjust the font size as needed */
+}
+
+.image-gallery-slide img {
+  max-width: 100%; /* Ensures image does not exceed the container width */
+  height: auto; /* Maintains aspect ratio */
+}
+
+/* Adjusting ImageSlider component */
+.image-container {
+  max-width: 100%; /* Adjust as per your layout */
+  overflow: hidden; /* Ensures content does not overflow */
+}
+
+.image-container img {
+  width: 100%; /* Adjust image to container width */
+  height: auto; /* Maintains aspect ratio */
+}

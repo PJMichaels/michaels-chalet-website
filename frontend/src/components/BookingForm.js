@@ -58,7 +58,7 @@ const navigate = useNavigate();
     };
 
     return (
-        <div className="booking-form">
+        <div className="content-container">
          <form onSubmit={handleSubmit}>
                  <label>Guest Name:</label>
                  <input type="text" name="name" onChange={handleChange} required />

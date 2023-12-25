@@ -17,15 +17,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from todo import views as todoviews
 from chaletsync import views as chaletsyncviews
+from authentication import views as authenticationviews
+from rest_framework_simplejwt import views as jwt_views
 
 router = routers.DefaultRouter()
-router.register(r'todos', todoviews.TodoView, 'todo')
 router.register(r'available', chaletsyncviews.AvailabilityView, 'availability')
 router.register(r'bookings', chaletsyncviews.BookingsView, 'bookings')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/token/', 
+          jwt_views.TokenObtainPairView.as_view(), 
+          name ='token_obtain_pair'),
+     path('api/token/refresh/', 
+          jwt_views.TokenRefreshView.as_view(), 
+          name ='token_refresh'),
+    path('', include('authentication.urls')),
+    path('api/logout/', authenticationviews.LogoutView.as_view(), name ='logout'),
 ]

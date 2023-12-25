@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-// import './BookingForm.css'
 
 const AvailabilityForm = ({start_date, end_date}) => {
     const [formData, setFormData] = useState({
@@ -9,6 +7,8 @@ const AvailabilityForm = ({start_date, end_date}) => {
         endDate: end_date.toDateString(),
         reason: "",
     });
+
+
 
     const handleChange = (e) => {
         setFormData({
@@ -31,10 +31,9 @@ const AvailabilityForm = ({start_date, end_date}) => {
         return [year, month, day].join('-');
     }
 
-const navigate = useNavigate();
-
-  const redirectToPage = () => {
-    navigate('/booking/');}
+function refreshPage() {
+    window.location.reload(false);
+  }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -46,7 +45,7 @@ const navigate = useNavigate();
         })
             .then((response) => {
                 console.log(response.data);
-                redirectToPage();
+                refreshPage();
             })
             .catch((error) => {
                 // This error should really be in a modal long term

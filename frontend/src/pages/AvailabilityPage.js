@@ -3,6 +3,7 @@ import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 import AvailabilityForm from "../components/AvailabilityForm";
 import AdminCalendar from "../components/AdminCalendar";
+import ProvisioningManagement from '../components/ProvisioningManagement';
 import './AvailabilityPage.css';
 
 const AvailabilityPage = () => {
@@ -102,6 +103,7 @@ const AvailabilityPage = () => {
     // };
 
   return (
+    <div>
     <div className="booking-container">
         <AvailabilityForm
              start_date={selectedDates[0]}
@@ -112,6 +114,10 @@ const AvailabilityPage = () => {
              selectedDates={selectedDates}
              handleDateChange = {handleDateChange}
              />
+   </div>
+   <div>
+    <ProvisioningManagement/>
+   </div>
    </div>
   );
 };
