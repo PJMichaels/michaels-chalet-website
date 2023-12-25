@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-// import './BookingForm.css'
 
 const AvailabilityForm = ({start_date, end_date}) => {
     const [formData, setFormData] = useState({
