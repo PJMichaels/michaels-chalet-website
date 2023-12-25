@@ -38,6 +38,25 @@ nav a {
 
 nav a:hover {
     background-color: #575757;
+    color: #007bff;
+    text-decoration: underline;
+}
+
+nav button {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: Transparent;
+    border: none;
+}
+
+nav button:hover {
+    background-color: #575757;
+    color: #007bff;
+    text-decoration: underline;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -86,4 +105,9 @@ p {
     padding: 20px;
     border-radius: 10px;
     margin: 20px auto; /* centers the container */
+}
+
+
+textarea {
+    width: 100%;
 }
