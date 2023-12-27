@@ -1,23 +1,32 @@
 // PrivateRoute.js
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // Import useAuth hook
+import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
 
 const PrivateRoute = ({ children }) => {
-    const { isLoggedIn, isLoading } = useAuth();
+    const { isLoggedIn, isLoading, validateToken } = useAuth();
     const location = useLocation();
+    const [isValidating, setIsValidating] = useState(true);
 
-    if (isLoading) {
-        return <div>Loading...</div>; // Show a loading state while authentication status is determined
+    useEffect(() => {
+        const checkToken = async () => {
+            const isValid = await validateToken();
+            setIsValidating(!isValid); // Stop validating if the token is invalid
+        };
+
+        checkToken();
+    }, [location, validateToken]); // Re-run validation when the location changes
+
+    if (isLoading || isValidating) {
+        return <div>Loading...</div>; // Or your preferred loading indicator
     }
 
     if (!isLoggedIn) {
-        // If the user is not logged in, redirect to the login page and remember the current location
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    return children; // If the user is logged in, render the children components
+    return children;
 };
 
 export default PrivateRoute;

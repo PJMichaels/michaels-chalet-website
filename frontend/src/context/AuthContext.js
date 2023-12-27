@@ -9,11 +9,37 @@ export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Check the local storage for an access token and update isLoggedIn accordingly
+    // Function to validate the current token
+    const validateToken = async () => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            setIsLoggedIn(false);
+            setIsLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axios.post('/api/token/validate/', { token });
+            if (response.data.valid) {
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                setIsLoggedIn(true);
+            } else {
+                localStorage.clear();
+                delete axios.defaults.headers.common['Authorization'];
+                setIsLoggedIn(false);
+            }
+        } catch (error) {
+            console.error('Token validation error', error);
+            localStorage.clear();
+            delete axios.defaults.headers.common['Authorization'];
+            setIsLoggedIn(false);
+        }
+        setIsLoading(false);
+    };
+
+    // Validate token on initial load
     useEffect(() => {
-        const access_token = localStorage.getItem('access_token');
-        setIsLoggedIn(!!access_token);
-        setIsLoading(false); // Set loading to false once the check is complete
+        validateToken();
     }, []);
 
     // Provide a login function that updates the isLoggedIn state
@@ -55,7 +81,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout }}>
+        <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout, validateToken }}>
             {children}
         </AuthContext.Provider>
     );
