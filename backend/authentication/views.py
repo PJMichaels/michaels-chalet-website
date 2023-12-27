@@ -4,6 +4,9 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework import status
+from rest_framework.exceptions import ValidationError
 
 class HomeView(APIView):
      
@@ -28,3 +31,18 @@ class LogoutView(APIView):
             
           except Exception as e:               
               return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ValidateTokenView(APIView):
+    def post(self, request, *args, **kwargs):
+        token = request.data.get('token')
+        if not token:
+            return Response({'detail': 'No token provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Attempt to validate the token
+            valid_token = AccessToken(token)
+            return Response({'valid': True, 'payload': valid_token.payload}, status=status.HTTP_200_OK)
+        except ValidationError as e:
+            # Token is invalid or expired
+            return Response({'valid': False, 'detail': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
