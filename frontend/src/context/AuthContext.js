@@ -19,9 +19,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         try {
-            console.log('working');
             const response = await axios.post('/api/token/validate/', { token });
-            console.log('working');
             if (response.data.valid) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setIsLoggedIn(true);
