@@ -12,6 +12,9 @@ class Availability(models.Model):
         return self.title
 
 # add custom user model to make usernames = emails
+# add role??
+# make passwords optional for limited_guest so they can be created by
+# non-limited guests as part of booking
 
 class Bookings(models.Model):
     # swap name with created by
