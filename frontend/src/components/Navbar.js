@@ -106,6 +106,7 @@ const Navbar = () => {
   return (
     <nav>
       {
+      isLoading ? <LoadingIndicator />:
       isAdmin ? <AdminRoutes /> :
       isGuest ? <GuestRoutes />:
       isLimitedGuest ? <LimitedGuestRoutes />:
