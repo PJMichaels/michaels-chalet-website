@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.contrib.auth.models import Group, User
-from .serializers import UserSerializer, BookingsSerializer, AvailabilitySerializer #, GroupSerializer
+from .serializers import UserSerializer, BookingsSerializer, AvailabilitySerializer
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
 from .models import Bookings, Availability
@@ -16,15 +16,26 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # view for admin to add/update/delete all bookings
 class BookingsView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, IsGuestUser)
+    permission_classes = (IsAuthenticated, (IsAdminUser or IsGuestUser))
     serializer_class = BookingsSerializer
     queryset = Bookings.objects.all()
 
+# view for booking page with limited details
+# class LimitedBookingsView(viewsets.ModelViewSet):
+#     permission_classes = (IsAuthenticated, (IsAdminUser or IsGuestUser))
+#     serializer_class = LimitedBookingsSerializer
+#     queryset = Bookings.objects.all()
+
 # view for admin to add/update/delete all availability
 class AvailabilityView(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, (IsAdminUser or IsGuestUser))
     serializer_class = AvailabilitySerializer
     queryset = Availability.objects.all()
+
+# class LimitedAvailabilityView(viewsets.ModelViewSet):
+#     permission_classes = (IsAuthenticated, (IsAdminUser or IsGuestUser))
+#     serializer_class = LimitedAvailabilitySerializer
+#     queryset = Availability.objects.all()
 
 # add multiple views for admin to see all other models ...
 
