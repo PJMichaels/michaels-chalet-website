@@ -2,12 +2,26 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [userEmail, setUserEmail] = useState('');
+    const [userGroups, setUserGroups] = useState([]);
+
+    // function to extract user and group from token
+    const decodeToken = (token) => {
+        try {
+            const decoded = jwtDecode(token);
+            setUserEmail(decoded.email);
+            setUserGroups(decoded.groups);
+        } catch (error) {
+            console.error('Error decoding token', error);
+        }
+    };
 
     // Function to validate the current token
     const validateToken = async () => {
@@ -15,6 +29,8 @@ export const AuthProvider = ({ children }) => {
         if (!token) {
             setIsLoggedIn(false);
             setIsLoading(false);
+            setUserEmail('');
+            setUserGroups([]);
             return;
         }
 
@@ -23,21 +39,25 @@ export const AuthProvider = ({ children }) => {
             if (response.data.valid) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setIsLoggedIn(true);
+                decodeToken(token);
             } else {
                 localStorage.clear();
                 delete axios.defaults.headers.common['Authorization'];
                 setIsLoggedIn(false);
+                setUserEmail('');
+                setUserGroups([]);
             }
         } catch (error) {
             console.error('Token validation error', error);
             localStorage.clear();
             delete axios.defaults.headers.common['Authorization'];
             setIsLoggedIn(false);
+            setUserEmail('');
+            setUserGroups([]);
         }
         setIsLoading(false);
     };
 
-    // Validate token on initial load
     useEffect(() => {
         validateToken();
     }, []);
@@ -50,6 +70,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('refresh_token', data.refresh);
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
             setIsLoggedIn(true);
+            decodeToken(data.access); // Decode token to update userGroups and userEmail
         } catch (error) {
             console.error('Login error', error);
         }
@@ -81,7 +102,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, isLoading, login, logout, validateToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, isLoading, userEmail, userGroups, login, logout, validateToken }}>
             {children}
         </AuthContext.Provider>
     );
