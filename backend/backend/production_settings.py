@@ -25,14 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-)o9c4c8kp7)q(!&d2tjk1tz2ol+m(80b&=62lif-dqp@os^0xy'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-SECRET_KEY = os.environ['SECRET_KEY']
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['backend', 'localhost', '127.0.0.1', "*"]
 
@@ -93,6 +94,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Development database
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
@@ -100,6 +102,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
+# Production database - need to take out of this file
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -110,10 +113,6 @@ DATABASES = {
     'PORT': os.environ['DB_PORT'],
   }
 }
-
-
-
-
 
 
 # Password validation
@@ -168,10 +167,9 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 SIMPLE_JWT = {
-    'TOKEN_USER_CLASS': 'django.contrib.auth.models.User',
-    'TOKEN_PAYLOAD_HANDLER': 'chaletsync.utils.custom_token_payload_handler',
      'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
      'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
      'ROTATE_REFRESH_TOKENS': True,
-     'BLACKLIST_AFTER_ROTATION': True
+     'BLACKLIST_AFTER_ROTATION': True,
+     'TOKEN_OBTAIN_SERIALIZER': 'chaletsync.serializers.MyTokenObtainPairSerializer',
 }
