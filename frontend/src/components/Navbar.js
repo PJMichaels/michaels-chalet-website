@@ -10,9 +10,10 @@ const Navbar = () => {
   const { isLoggedIn, isLoading, logout, userGroups } = useAuth();
 
   const isAdmin = isLoggedIn && userGroups.includes('Admin');
-  const isAdminOrGuest = isLoggedIn && (userGroups.includes('Admin') || userGroups.includes('Guest'));
   const isGuest = isLoggedIn && userGroups.includes('Guest');
   const isLimitedGuest = isLoggedIn && userGroups.includes('LimitedGuest');
+  // const isAdminOrGuest = isLoggedIn && (userGroups.includes('Admin') || userGroups.includes('Guest'));
+
 
   const AdminRoutes = () => {
     return (
