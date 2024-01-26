@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 #     }
 # }
 
-#Production database - need to take out of this file
+# Production database - need to take out of this file
 DATABASES = {
   'default': {
     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -169,5 +169,6 @@ SIMPLE_JWT = {
      'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
      'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
      'ROTATE_REFRESH_TOKENS': True,
-     'BLACKLIST_AFTER_ROTATION': True
+     'BLACKLIST_AFTER_ROTATION': True,
+     'TOKEN_OBTAIN_SERIALIZER': 'chaletsync.serializers.MyTokenObtainPairSerializer',
 }
