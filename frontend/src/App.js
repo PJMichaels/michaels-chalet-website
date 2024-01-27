@@ -1,5 +1,4 @@
 import React from 'react';
-// import React, { useState, useEffect } from 'react';
 import { 
   BrowserRouter as Router, 
   Route, 
@@ -20,6 +19,7 @@ import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
+import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
 import './App.css';
 import CheckoutListPage from './pages/CheckoutListPage';
@@ -40,6 +40,7 @@ function AppContent() {
           <Route path="/login" element={<Login/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/booking" element={<BookingPage />} />
+          {/* <Route path="/date-provisioning" element={<AvailabilityPage />} /> */}
           <Route path="/reservations" element={<ReservationPage />} />
           <Route path="/saco-river" element={<FloatPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
@@ -47,14 +48,18 @@ function AppContent() {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/checkout" element={<CheckoutListPage />} />
-          <Route path="/stayinfo" element={<StayInfoPage />} />
+          {/* <Route path="/stayinfo" element={<StayInfoPage />} /> */}
 
+          {/* <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> */}
+          <Route path="/stayinfo" element={<GuestRoute><StayInfoPage /></GuestRoute>} />
+          <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />      
+        
           {/* Protected routes that require authentication */}
-          <Route path="/lp-admin" element={
+          {/* <Route path="/date-provisioning" element={
               <PrivateRoute>
                   <AvailabilityPage />
               </PrivateRoute>
-          } />
+          } /> */}
           {/* Add more protected routes as needed here */}
       </Routes>
   );

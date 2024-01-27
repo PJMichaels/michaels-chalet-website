@@ -19,21 +19,25 @@ from django.urls import path, include
 from rest_framework import routers
 from chaletsync import views as chaletsyncviews
 from authentication import views as authenticationviews
-from rest_framework_simplejwt import views as jwt_views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 router = routers.DefaultRouter()
 router.register(r'available', chaletsyncviews.AvailabilityView, 'availability')
 router.register(r'bookings', chaletsyncviews.BookingsView, 'bookings')
+router.register(r'users', chaletsyncviews.UserViewSet, 'users')
+# router.register(r'groups', chaletsyncviews.GroupViewSet, 'groups')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/token/', 
-          jwt_views.TokenObtainPairView.as_view(), 
+          TokenObtainPairView.as_view(), 
           name ='token_obtain_pair'),
-     path('api/token/refresh/', 
-          jwt_views.TokenRefreshView.as_view(), 
+    path('api/token/refresh/', 
+          TokenRefreshView.as_view(), 
           name ='token_refresh'),
     path('', include('authentication.urls')),
+    path('api/token/validate/', authenticationviews.ValidateTokenView.as_view(), name='token_validate'),     
     path('api/logout/', authenticationviews.LogoutView.as_view(), name ='logout'),
 ]
