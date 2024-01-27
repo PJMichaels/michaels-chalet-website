@@ -7,19 +7,22 @@ import {jwtDecode} from 'jwt-decode';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState('');
     const [userGroups, setUserGroups] = useState([]);
 
     // function to extract user and group from token
+
     const decodeToken = (token) => {
         try {
             const decoded = jwtDecode(token);
-            setUserEmail(decoded.email);
-            setUserGroups(decoded.groups);
+            setUserEmail(decoded.email || '');
+            setUserGroups(decoded.groups || []);
         } catch (error) {
             console.error('Error decoding token', error);
+            setUserEmail('');
+            setUserGroups([]); // Fallback to default values
         }
     };
 
@@ -28,32 +31,25 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('access_token');
         if (!token) {
             setIsLoggedIn(false);
-            setIsLoading(false);
             setUserEmail('');
-            setUserGroups([]);
+            setUserGroups([]); // Ensure default values are set
+            setIsLoading(false);
             return;
         }
-
+    
+        decodeToken(token); // Decode immediately to set userGroups
+    
         try {
             const response = await axios.post('/api/token/validate/', { token });
             if (response.data.valid) {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setIsLoggedIn(true);
-                decodeToken(token);
             } else {
-                localStorage.clear();
-                delete axios.defaults.headers.common['Authorization'];
-                setIsLoggedIn(false);
-                setUserEmail('');
-                setUserGroups([]);
+                handleLogout(); // Refactor logout steps into a separate function
             }
         } catch (error) {
             console.error('Token validation error', error);
-            localStorage.clear();
-            delete axios.defaults.headers.common['Authorization'];
-            setIsLoggedIn(false);
-            setUserEmail('');
-            setUserGroups([]);
+            handleLogout();
         }
         setIsLoading(false);
     };
@@ -76,6 +72,15 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.clear();
+        delete axios.defaults.headers.common['Authorization'];
+        setIsLoggedIn(false);
+        setUserEmail('');
+        setUserGroups([]);
+        window.location.href = '/';
+    };
+
     // Provide a logout function that updates the isLoggedIn state
     const logout = async () => {
         try {
@@ -86,18 +91,13 @@ export const AuthProvider = ({ children }) => {
                 headers: {'Content-Type': 'application/json'},
                 withCredentials: true
             });
-
-            // Clear local storage and reset axios headers
-            localStorage.clear();
-            delete axios.defaults.headers.common['Authorization'];
-
-            // Update application state
-            setIsLoggedIn(false);
-
-            // Redirect to home or login page
-            window.location.href = '/';
+    
+            // Use the common logout handler
+            handleLogout();
         } catch (error) {
             console.log('Logout failed', error);
+            // Even in case of error, it might be safe to clean up the local state
+            handleLogout();
         }
     };
 
