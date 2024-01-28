@@ -3,6 +3,7 @@ from rest_framework import viewsets
 from django.contrib.auth.models import Group, User
 from .serializers import UserSerializer, BookingsSerializer, AvailabilitySerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
 from .models import Bookings, Availability
 
@@ -44,3 +45,8 @@ class AvailabilityView(viewsets.ModelViewSet):
 # create a view or serializer for bookings only for the the current user
 
 # eventually add views for float trips, guest book, etc..
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

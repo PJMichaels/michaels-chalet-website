@@ -26,6 +26,11 @@ router = routers.DefaultRouter()
 router.register(r'available', chaletsyncviews.AvailabilityView, 'availability')
 router.register(r'bookings', chaletsyncviews.BookingsView, 'bookings')
 router.register(r'users', chaletsyncviews.UserViewSet, 'users')
+# router.register(r'users', chaletsyncviews.UserList, 'users')
+# router.register(r'users-details', chaletsyncviews.UserDetail, 'user-details')
+
+
+#     path('users/<int:pk>/', views.UserDetail.as_view()),
 # router.register(r'groups', chaletsyncviews.GroupViewSet, 'groups')
 
 urlpatterns = [
