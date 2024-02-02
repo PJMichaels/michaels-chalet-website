@@ -53,22 +53,42 @@ const BookingPage = () => {
         */
         const expandDateRanges = (dates) => {
             let result = [];
+
+            // testing if this prevents loading error
+            if (!dates) {
+                return result;
+            }
         
             dates.forEach(range => {
                 let current = new Date(range.start_date);
                 let end = new Date(range.end_date);
         
                 while (current <= end) {
-                    // push after date change to account zero index of day in calendar
-                    current.setDate(current.getDate() + 1);
                     result.push(current.toDateString());
+                    // push date change to account zero index of day in calendar
+                    current.setDate(current.getDate() + 1);
                 }
             });
             return result;
         };
     
+        const filterDatesAfterToday = (dates) => {
+            const daysFromToday = 2;
+            // const today = new Date();
+            // today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
+            const earliestBookingDate = new Date();
+            earliestBookingDate.setDate(earliestBookingDate.getDate() + daysFromToday); // Set to 2 days from now
+            earliestBookingDate.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
+
+    
+            return dates.filter(date => {
+                const compareDate = new Date(date);
+                return compareDate > earliestBookingDate;
+            });
+        };
+    
         const bookedDates = expandDateRanges(bookedRanges);
-        const provisionedDates = expandDateRanges(provisionedRanges);
+        const provisionedDates = filterDatesAfterToday(expandDateRanges(provisionedRanges));
         const availableDates = [];
     
         provisionedDates.forEach((date) => {

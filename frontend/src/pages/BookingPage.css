@@ -99,3 +99,8 @@
         align-items: center;
     }
 }
+
+.react-calendar__tile:disabled {
+    color: #d3d3d3;
+    background-color: #fffaf0;
+  }
