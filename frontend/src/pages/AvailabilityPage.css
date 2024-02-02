@@ -36,6 +36,16 @@
     color: #8a4baf;
 }
 
+.react-calendar .booked-date {
+    background-color: #b4d2f9 !important;
+    color: #343a40 !important;
+}
+
+.react-calendar__tile:disabled {
+    /* color: #d3d3d3; */
+    background-color: #fffaf0;
+  }
+
 .react-calendar__month-view__weekdays__weekday {
     color: #fffcee;
     padding: 8px 0;

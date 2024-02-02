@@ -24,10 +24,6 @@ const AvailabilityPage = () => {
             });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-    // const allowedRanges = allowedData.map((entry, index) => 
-    // ({'start': new Date(entry.start_date), 'end': new Date(entry.end_date)})
-    // );
-
 
     // variables for booking data to be stored or error states
     // from booking data, then assign values to those variables
@@ -47,40 +43,33 @@ const AvailabilityPage = () => {
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
     // starts the calendar creation process
-    const getAvailableDates = (provisionedRanges, bookedRanges) => {
-        /*
-        Function takes in two arrays of objects, where each object must
-        contain a "start_date" and "end_date" key and date string value.
-        */
-        const expandDateRanges = (dates) => {
-            let result = [];
-        
-            dates.forEach(range => {
-                let current = new Date(range.start_date);
-                let end = new Date(range.end_date);
-        
-                while (current <= end) {
-                    // push after date change to account zero index of day in calendar
-                    current.setDate(current.getDate() + 1);
-                    result.push(current.toDateString());
-                }
-            });
-            return result;
-        };
-    
-        const bookedDates = expandDateRanges(bookedRanges);
-        const provisionedDates = expandDateRanges(provisionedRanges);
-        const availableDates = [];
-    
-        provisionedDates.forEach((date) => {
-            if (!bookedDates.includes(date)) {
-                availableDates.push(date);
-            }
-        })
-        return availableDates;
-    }
+    const expandDateRanges = (dates) => {
 
-    const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
+        let result = [];
+
+        // testing if this prevents loading error
+        if (!dates) {
+            return result;
+        }
+    
+        dates.forEach(range => {
+            let current = new Date(range.start_date);
+            let end = new Date(range.end_date);
+    
+            while (current <= end) {
+                // push after date change to account zero index of day in calendar
+                current.setDate(current.getDate() + 1);
+                result.push(current.toDateString());
+            }
+        });
+        return result;
+    };
+
+    const provisionedDates = expandDateRanges(provisionedAPI);
+    const bookedDates = expandDateRanges(bookedAPI);
+    
+
+    // const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
 
     const [selectedDates, setDates] = React.useState([new Date(), new Date()]);
 
@@ -89,18 +78,7 @@ const AvailabilityPage = () => {
         setDates(newDates);
     };
 
-    // Actively working on this to add delete available provisioned to admin page
-    // const deleteProvisioned = (id) => {
-    //     axios.delete(`/api/available/${id}/`)
-    //         .then(() => {
-    //             // Remove the deleted booking from the state
-    //             const updatedBookings = availableDates.filter(provisioned => provisioned.id !== id);
-    //             setBookingData(updatedBookings);
-    //         })
-    //         .catch(err => {
-    //             setBookedAPIError(err.toString());
-    //         });
-    // };
+
 
   return (
     <div>
@@ -110,7 +88,9 @@ const AvailabilityPage = () => {
              end_date= {selectedDates[1]}
          />
          <AdminCalendar 
-             availableDates={availableDates}
+            // evaluate availableDates vs provisionedDates here
+             availableDates={provisionedDates}
+             bookedDates={bookedDates}
              selectedDates={selectedDates}
              handleDateChange = {handleDateChange}
              />
