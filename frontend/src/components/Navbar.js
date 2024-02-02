@@ -26,6 +26,7 @@ const Navbar = () => {
       <li><Link to="/reservations">Reservations</Link></li>
       <li><Link to="/stayinfo">Stay Info</Link></li>
       <li><Link to="/checkout">Checkout Info</Link></li>
+      <li><Link to="/profile">My Profile</Link></li>
       <li><button onClick={logout}>Logout</button></li>
     </ul>
     );
@@ -40,6 +41,7 @@ const Navbar = () => {
       <li><Link to="/reservations">Reservations</Link></li>
       <li><Link to="/stayinfo">Stay Info</Link></li>
       <li><Link to="/checkout">Checkout Info</Link></li>
+      <li><Link to="/profile">My Profile</Link></li>
       <li><button onClick={logout}>Logout</button></li>
     </ul>
     );
@@ -53,6 +55,7 @@ const Navbar = () => {
       <li><Link to="/reservations">Reservations</Link></li>
       <li><Link to="/stayinfo">Stay Info</Link></li>
       <li><Link to="/checkout">Checkout Info</Link></li>
+      <li><Link to="/profile">My Profile</Link></li>
       <li><button onClick={logout}>Logout</button></li>
     </ul>
     );

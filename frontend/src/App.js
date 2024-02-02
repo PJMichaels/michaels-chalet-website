@@ -18,11 +18,12 @@ import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
 import './App.css';
 import CheckoutListPage from './pages/CheckoutListPage';
+import UserManagementPage from './pages/UserManagementPage';
+import UserProfilePage from './pages/UserProfile';
 
 
 function AppContent() {
@@ -52,15 +53,9 @@ function AppContent() {
 
           {/* <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> */}
           <Route path="/stayinfo" element={<GuestRoute><StayInfoPage /></GuestRoute>} />
-          <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />      
-        
-          {/* Protected routes that require authentication */}
-          {/* <Route path="/date-provisioning" element={
-              <PrivateRoute>
-                  <AvailabilityPage />
-              </PrivateRoute>
-          } /> */}
-          {/* Add more protected routes as needed here */}
+          <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />
+          <Route path="/user-management" element={<AdminRoute><UserManagementPage /></AdminRoute>} />
+          <Route path="/profile" element={<UserProfilePage />} />
       </Routes>
   );
 }
