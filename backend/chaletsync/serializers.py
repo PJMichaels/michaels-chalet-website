@@ -39,7 +39,7 @@ class BookingsSerializer(serializers.ModelSerializer):
 # create a serializer for availability just for guests
 
 # serializer for user and group management
-class UserSerializer(serializers.ModelSerializer):
+class AdminUserSerializer(serializers.ModelSerializer):
     groups = serializers.SlugRelatedField(
         many=True,
         queryset=Group.objects.all(),
@@ -71,3 +71,26 @@ class UserSerializer(serializers.ModelSerializer):
             instance.groups.set(groups)
 
         return instance
+    
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    # class UserSerializer(serializers.ModelSerializer):
+    #     class Meta:
+    #         model = User
+    #         fields = ['id', 'username', 'email', 'first_name', 'last_name']  # Customize fields as needed
+    #         extra_kwargs = {'password': {'write_only': True}}
+
+    #     def create(self, validated_data):
+    #         user = User.objects.create_user(**validated_data)
+    #         return user
+
+    #     def update(self, instance, validated_data):
+    #         instance.email = validated_data.get('email', instance.email)
+    #         # handle other fields
+    #         instance.save()
+    #         return instance

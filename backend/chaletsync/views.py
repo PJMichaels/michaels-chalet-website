@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.contrib.auth.models import Group, User
-from .serializers import UserSerializer, BookingsSerializer, AvailabilitySerializer
+from .serializers import AdminUserSerializer, UserSerializer, BookingsSerializer, AvailabilitySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
+from rest_framework.views import APIView
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
 from .models import Bookings, Availability
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 
@@ -49,4 +52,18 @@ class AvailabilityView(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, IsAdminUser)
     queryset = User.objects.all()
+    serializer_class = AdminUserSerializer
+
+
+class UserView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Ensure the user can only access their own information
+        return self.request.user
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
