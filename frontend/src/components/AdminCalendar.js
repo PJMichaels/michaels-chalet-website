@@ -12,16 +12,28 @@ const AdminCalendar = ({availableDates, bookedDates, selectedDates, handleDateCh
         if (view !== 'month') {
           return false;
         }
-      
-        return !availableDates.includes(date.toDateString());
-      };
 
+        return availableDates.includes(date.toDateString());
+      };
+    
+
+    function tileClassName({ date, view }) {
+      if (
+        view === 'month' &&
+        bookedDates.includes(date.toDateString())
+      ) {
+        return 'booked-date';
+      }
+    }
+
+    console.log(bookedDates)
     return (
       <div className="booking-calendar">
         <Calendar 
         onChange={handleDateChange}
         value={selectedDates}
-        // tileDisabled={isDateDisabled}
+        tileDisabled={isDateDisabled}
+        tileClassName={tileClassName}
         selectRange={true}
         />
       </div>
