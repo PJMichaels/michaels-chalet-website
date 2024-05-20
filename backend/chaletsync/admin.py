@@ -5,7 +5,19 @@ class AvailabilityAdmin(admin.ModelAdmin):
     list_display = ('reason', 'start_date', 'end_date')
 
 class BookingsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'group_size', 'start_date', 'end_date', 'note')
+    list_display = (
+        'created_by',
+        'creation_date',
+        'last_modified',
+        'group_size',
+        'arrival_date',
+        'departure_date',
+        'request_message',
+        'price',
+        'payment_received',
+        'status',
+        'admin_note'
+        )
 
 
 
