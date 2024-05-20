@@ -14,8 +14,7 @@ const AvailabilityPage = () => {
 
     // Queries available api and populate variables
     useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/available/')
+        axios.get('/api/availability/')
             .then((response) => {
                 setProvisionedAPI(response.data);
             })
@@ -53,6 +52,7 @@ const AvailabilityPage = () => {
         }
     
         dates.forEach(range => {
+           
             let current = new Date(range.start_date);
             let end = new Date(range.end_date);
     
@@ -65,8 +65,32 @@ const AvailabilityPage = () => {
         return result;
     };
 
+    // starts the calendar creation process
+    const expandDateRanges2 = (dates) => {
+
+        let result = [];
+
+        // testing if this prevents loading error
+        if (!dates) {
+            return result;
+        }
+    
+        dates.forEach(range => {
+           
+            let current = new Date(range.arrival_date);
+            let end = new Date(range.departure_date);
+    
+            while (current <= end) {
+                // push after date change to account zero index of day in calendar
+                current.setDate(current.getDate() + 1);
+                result.push(current.toDateString());
+            }
+        });
+        return result;
+    };
+
     const provisionedDates = expandDateRanges(provisionedAPI);
-    const bookedDates = expandDateRanges(bookedAPI);
+    const bookedDates = expandDateRanges2(bookedAPI);
     
 
     // const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
