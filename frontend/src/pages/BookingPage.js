@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
-import BookingForm from "../components/BookingForm";
+import RequestForm from "../components/RequestForm";
 import BookingCalendar from "../components/BookingCalendar";
+import getAvailableDates from "../funcs/calendarFuncs";
 import './BookingPage.css';
 
 const BookingPage = () => {
@@ -11,10 +12,9 @@ const BookingPage = () => {
     const [provisionedAPI, setProvisionedAPI] = useState([]);
     const [provisionedAPIError, setProvisionedAPIError] = useState(null);
 
-    // Queries available api and populate variables
+    // Queries availability api and populate variables
     useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/available/')
+        axios.get('/api/availability/')
             .then((response) => {
                 setProvisionedAPI(response.data);
             })
@@ -35,7 +35,6 @@ const BookingPage = () => {
 
     // this code actually populates variables
     useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
         axios.get('/api/bookings/')
             .then((response) => {
                 setBookedAPI(response.data);
@@ -45,61 +44,7 @@ const BookingPage = () => {
             });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-    // starts the calendar creation process
-    const getAvailableDates = (provisionedRanges, bookedRanges) => {
-        /*
-        Function takes in two arrays of objects, where each object must
-        contain a "start_date" and "end_date" key and date string value.
-        */
-        const expandDateRanges = (dates) => {
-            let result = [];
-
-            // testing if this prevents loading error
-            if (!dates) {
-                return result;
-            }
-        
-            dates.forEach(range => {
-                let current = new Date(range.start_date);
-                let end = new Date(range.end_date);
-        
-                while (current <= end) {
-                    result.push(current.toDateString());
-                    // push date change to account zero index of day in calendar
-                    current.setDate(current.getDate() + 1);
-                }
-            });
-            return result;
-        };
-    
-        const filterDatesAfterToday = (dates) => {
-            const daysFromToday = 2;
-            // const today = new Date();
-            // today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
-            const earliestBookingDate = new Date();
-            earliestBookingDate.setDate(earliestBookingDate.getDate() + daysFromToday); // Set to 2 days from now
-            earliestBookingDate.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
-
-    
-            return dates.filter(date => {
-                const compareDate = new Date(date);
-                return compareDate > earliestBookingDate;
-            });
-        };
-    
-        const bookedDates = expandDateRanges(bookedRanges);
-        const provisionedDates = filterDatesAfterToday(expandDateRanges(provisionedRanges));
-        const availableDates = [];
-    
-        provisionedDates.forEach((date) => {
-            if (!bookedDates.includes(date)) {
-                availableDates.push(date);
-            }
-        })
-        return availableDates;
-    }
-
-    const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
+    const availableDates = getAvailableDates(provisionedAPI, bookedAPI, 2);
 
     const [selectedDates, setDates] = React.useState([new Date(), new Date()]);
 
@@ -110,9 +55,9 @@ const BookingPage = () => {
 
   return (
     <div className="booking-container">
-        <BookingForm
-             start_date={selectedDates[0]}
-             end_date= {selectedDates[1]}
+        <RequestForm
+             arrival_date={selectedDates[0]}
+             departure_date= {selectedDates[1]}
          />
          <BookingCalendar 
              availableDates={availableDates}
