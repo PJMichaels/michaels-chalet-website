@@ -65,6 +65,7 @@ const Navbar = () => {
     return (
     <ul>
       <li><Link to="/">Home</Link></li>
+      <li><Link to="/gallery">Gallery</Link></li>
       <li><Link to="/saco-river">Saco River Tubing</Link></li>
       <li><Link to="/login">Login</Link></li>
     </ul>
