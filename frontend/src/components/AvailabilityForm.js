@@ -38,7 +38,7 @@ function refreshPage() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Post booking request to Django backend
-        Axios.post('/api/available/', {
+        Axios.post('/api/availability/', {
             "start_date": formatDate(start_date),
             "end_date": formatDate(end_date),
             "reason": formData.reason
