@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 // import './BookingForm.css'
 
-const BookingForm = ({start_date, end_date}) => {
+
+const RequestForm = ({arrival_date, departure_date}) => {
     const [formData, setFormData] = useState({
-        startDate: start_date.toDateString(),
-        endDate: end_date.toDateString(),
-        note: "",
-        group_size: "",
+        arrivalDate: arrival_date.toDateString(),
+        departureDate: departure_date.toDateString(),
+        requestMessage: "",
+        groupSize: "2",
     });
+
+    useEffect(() => {
+        setFormData(formData => ({
+            ...formData,
+            arrivalDate: arrival_date.toDateString(),
+            departureDate: departure_date.toDateString(),
+        }));
+    }, [arrival_date, departure_date]); // Update state when props change
 
     const handleChange = (e) => {
         setFormData({
@@ -40,12 +49,13 @@ const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Post booking request to Django backend
-        Axios.post('/api/bookings/', {
-            "name": formData.name,
-            "group_size": formData.group_size,
-            "start_date": formatDate(start_date),
-            "end_date": formatDate(end_date),
-            "note": formData.note
+        Axios.post('/api/requests/', {
+            "created_by": formData.createdBy,
+            "group_size": formData.groupSize,
+            "arrival_date": formatDate(formData.arrivalDate),
+            "departure_date": formatDate(formData.departureDate),
+            "request_message": formData.requestMessage,
+            "status": "new",
         })
             .then((response) => {
                 console.log(response.data);
@@ -61,15 +71,15 @@ const navigate = useNavigate();
         <div className="content-container">
          <form onSubmit={handleSubmit}>
                  <label>Guest Name:</label>
-                 <input type="text" name="name" onChange={handleChange} required />
-                 <label>Number of Guests: {formData.group_size}</label>
-                 <input type="range" min='1' max='6' name="group_size" onChange={handleChange} required />
+                 <input type="text" name="createdBy" onChange={handleChange} required />
+                 <label>Number of Guests: {formData.groupSize}</label>
+                 <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
                  <label>Request Message:</label>
-                 <textarea name="note" onChange={handleChange} required></textarea>
-             <button className="button" type="submit">Request Booking</button>
+                 <textarea name="requestMessage" onChange={handleChange} required></textarea>
+             <button className="button" type="submit">Request Stay</button>
          </form>
      </div>
     );
 };
 
-export default BookingForm;
+export default RequestForm;
