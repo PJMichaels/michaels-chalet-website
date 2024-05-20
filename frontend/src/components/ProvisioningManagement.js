@@ -11,7 +11,7 @@ const ProvisioningManagement = () => {
     // this code actually populates variables
     useEffect(() => {
         // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/available/')
+        axios.get('/api/availability/')
             .then((response) => {
                 setAvailabilityData(response.data);
             })
@@ -21,7 +21,7 @@ const ProvisioningManagement = () => {
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
     const deleteProvisioned = (id) => {
-      axios.delete(`/api/available/${id}/`)
+      axios.delete(`/api/availability/${id}/`)
           .then(() => {
               // Remove the deleted booking from the state
               const updatedAvailability = availabilityData.filter(item => item.id !== id);
