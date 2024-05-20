@@ -21,6 +21,7 @@ import Navbar from './components/Navbar';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
 import './App.css';
+// import './index.css';
 import CheckoutListPage from './pages/CheckoutListPage';
 import UserManagementPage from './pages/UserManagementPage';
 import UserProfilePage from './pages/UserProfile';
@@ -38,6 +39,7 @@ function AppContent() {
       <Routes>
           {/* Public routes that don't require authentication */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/login" element={<Login/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/booking" element={<BookingPage />} />
