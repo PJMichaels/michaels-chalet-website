@@ -8,9 +8,9 @@ const HomePage = () => {
 
   return (
     <div>
-      {/* <h1>Hello, this is the Home Page!</h1> */}
       <div className="content-container">
-        <ImageSlider />
+        <h1>Welcome to our mountain home!</h1>
+          <img src= '../../Photos/HomeFront.jpg' alt='Could not load'></img>
       </div>
       
     </div>
