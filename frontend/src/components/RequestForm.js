@@ -56,7 +56,7 @@ const navigate = useNavigate();
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
             "request_message": formData.requestMessage,
-            "status": "new",
+            "request_type": "new",
         })
             .then((response) => {
                 console.log(response.data);
