@@ -20,6 +20,7 @@ const Navbar = () => {
     <ul>
       <li><Link to="/">Home</Link></li>
       <li><Link to="/date-provisioning">Date Provisioning</Link></li>
+      <li><Link to="/reservation-management">Reservation Management</Link></li>
       <li><Link to="/user-management">User Management</Link></li>
       <li><Link to="/booking">Book Dates</Link></li>
       <li><Link to="/saco-river">Saco River Tubing</Link></li>
