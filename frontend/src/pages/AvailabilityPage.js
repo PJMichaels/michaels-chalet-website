@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import AvailabilityForm from "../components/AvailabilityForm";
 import AdminCalendar from "../components/AdminCalendar";
 import ProvisioningManagement from '../components/ProvisioningManagement';
+import {dateRangeToArray} from "../funcs/calendarFuncs";
 import './AvailabilityPage.css';
 
 const AvailabilityPage = () => {
@@ -41,60 +42,21 @@ const AvailabilityPage = () => {
             });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-    // starts the calendar creation process
-    const expandDateRanges = (dates) => {
 
-        let result = [];
+    var provisionedDates = [];
+    var bookedDates = [];
 
-        // testing if this prevents loading error
-        if (!dates) {
-            return result;
-        }
+    // populate bookedDates array with all date strings converted from ranges
+    bookedAPI.forEach(booking => {
+        bookedDates = bookedDates.concat(dateRangeToArray(booking.arrival_date, booking.departure_date));
+    })
     
-        dates.forEach(range => {
-           
-            let current = new Date(range.start_date);
-            let end = new Date(range.end_date);
+    // populate provisionedDates array with all date strings converted from ranges
+    provisionedAPI.forEach(provisioned => {
+        provisionedDates = provisionedDates.concat(dateRangeToArray(provisioned.start_date, provisioned.end_date));
+    })
+
     
-            while (current <= end) {
-                // push after date change to account zero index of day in calendar
-                current.setDate(current.getDate() + 1);
-                result.push(current.toDateString());
-            }
-        });
-        return result;
-    };
-
-    // starts the calendar creation process
-    const expandDateRanges2 = (dates) => {
-
-        let result = [];
-
-        // testing if this prevents loading error
-        if (!dates) {
-            return result;
-        }
-    
-        dates.forEach(range => {
-           
-            let current = new Date(range.arrival_date);
-            let end = new Date(range.departure_date);
-    
-            while (current <= end) {
-                // push after date change to account zero index of day in calendar
-                current.setDate(current.getDate() + 1);
-                result.push(current.toDateString());
-            }
-        });
-        return result;
-    };
-
-    const provisionedDates = expandDateRanges(provisionedAPI);
-    const bookedDates = expandDateRanges2(bookedAPI);
-    
-
-    // const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
-
     const [selectedDates, setDates] = React.useState([new Date(), new Date()]);
 
 
