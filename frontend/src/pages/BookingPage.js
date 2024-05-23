@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
 import RequestForm from "../components/RequestForm";
 import BookingCalendar from "../components/BookingCalendar";
-import getAvailableDates from "../funcs/calendarFuncs";
+import {getAvailableDates} from "../funcs/calendarFuncs";
 import './BookingPage.css';
 
 const BookingPage = () => {
