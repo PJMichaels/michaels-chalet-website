@@ -25,6 +25,7 @@ import './App.css';
 import CheckoutListPage from './pages/CheckoutListPage';
 import UserManagementPage from './pages/UserManagementPage';
 import UserProfilePage from './pages/UserProfile';
+import ReservationManagementPage from './pages/ReservationManagementPage';
 
 
 function AppContent() {
@@ -57,6 +58,7 @@ function AppContent() {
           <Route path="/stayinfo" element={<GuestRoute><StayInfoPage /></GuestRoute>} />
           <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />
           <Route path="/user-management" element={<AdminRoute><UserManagementPage /></AdminRoute>} />
+          <Route path="/reservation-management" element={<AdminRoute><ReservationManagementPage /></AdminRoute>} />
           <Route path="/profile" element={<UserProfilePage />} />
       </Routes>
   );
