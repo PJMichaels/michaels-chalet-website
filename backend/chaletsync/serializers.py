@@ -11,7 +11,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['email'] = user.email
-        # token['groups'] = user.groups
+        token['username'] = user.username
         token['groups'] = list(user.groups.values_list('name', flat=True))
         return token
 
