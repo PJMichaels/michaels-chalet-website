@@ -32,11 +32,13 @@ class BookingsView(viewsets.ModelViewSet):
         queryset = Bookings.objects.all()
         today = date.today()
         arrival_date = self.request.query_params.get('arrival_date', None)
-        
-        print(f"Query parameter 'arrival_date': {arrival_date}")  # Debugging statement
 
-        if arrival_date:
+        if arrival_date == 'all':
+            return queryset
+        
+        elif arrival_date:
             queryset = queryset.filter(arrival_date__gte=arrival_date)
+            
         else:
             queryset = queryset.filter(arrival_date__gte=today) | queryset.filter(departure_date__gte=today)
 
