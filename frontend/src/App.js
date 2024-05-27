@@ -18,6 +18,7 @@ import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
+import Modal from 'react-modal';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
 import './App.css';
@@ -27,6 +28,8 @@ import UserManagementPage from './pages/UserManagementPage';
 import UserProfilePage from './pages/UserProfile';
 import ReservationManagementPage from './pages/ReservationManagementPage';
 
+// Set the app element to your root element
+Modal.setAppElement('#root');
 
 function AppContent() {
   const { isLoading } = useAuth(); // Use the isLoading state from the context
