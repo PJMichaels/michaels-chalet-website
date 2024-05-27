@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userEmail, setUserEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [userGroups, setUserGroups] = useState([]);
 
     // function to extract user and group from token
@@ -18,10 +19,12 @@ export const AuthProvider = ({ children }) => {
         try {
             const decoded = jwtDecode(token);
             setUserEmail(decoded.email || '');
+            setUsername(decoded.username || '');
             setUserGroups(decoded.groups || []);
         } catch (error) {
             console.error('Error decoding token', error);
             setUserEmail('');
+            setUsername('');
             setUserGroups([]); // Fallback to default values
         }
     };
@@ -32,6 +35,7 @@ export const AuthProvider = ({ children }) => {
         if (!token) {
             setIsLoggedIn(false);
             setUserEmail('');
+            setUsername('');
             setUserGroups([]); // Ensure default values are set
             setIsLoading(false);
             return;
@@ -77,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         delete axios.defaults.headers.common['Authorization'];
         setIsLoggedIn(false);
         setUserEmail('');
+        setUsername('');
         setUserGroups([]);
         window.location.href = '/';
     };
@@ -102,7 +107,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, isLoading, userEmail, userGroups, login, logout, validateToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, isLoading, userEmail, username, userGroups, login, logout, validateToken }}>
             {children}
         </AuthContext.Provider>
     );
