@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
-// import { useAuth } from './AuthContext';
+import { useAuth } from '../context/AuthContext';
 // import './BookingForm.css'
 
 
 const RequestForm = ({arrival_date, departure_date}) => {
+    const {isLoading, username } = useAuth();
     const [formData, setFormData] = useState({
         arrivalDate: arrival_date.toDateString(),
         departureDate: departure_date.toDateString(),
@@ -50,8 +51,8 @@ const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
         // Post booking request to Django backend
-        Axios.post('/api/requests/', {
-            "created_by": formData.createdBy,
+        Axios.post('/api/myrequests/', {
+            "created_by": username,
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
@@ -71,8 +72,8 @@ const navigate = useNavigate();
     return (
         <div className="content-container">
          <form onSubmit={handleSubmit}>
-                 <label>Guest Name:</label>
-                 <input type="text" name="createdBy" onChange={handleChange} required />
+                 <label>Guest Name: {username}</label>
+                 {/* <input type="text" name="createdBy" onChange={handleChange} required /> */}
                  <label>Number of Guests: {formData.groupSize}</label>
                  <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
                  <label>Request Message:</label>
