@@ -4,7 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import AvailabilityForm from "../components/AvailabilityForm";
 import AdminCalendar from "../components/AdminCalendar";
 import ProvisioningManagement from '../components/ProvisioningManagement';
-import {dateRangeToArray} from "../funcs/calendarFuncs";
+import {dateRangeToArray} from "../utilities/calendarFuncs";
 import './AvailabilityPage.css';
 
 const AvailabilityPage = () => {
