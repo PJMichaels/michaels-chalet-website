@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import getRiverData from '../funcs/getRiverData';
+import getRiverData from '../utilities/getRiverData';
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 
