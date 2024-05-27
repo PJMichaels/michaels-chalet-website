@@ -6,16 +6,16 @@ const ReservationPage = () => {
 
 // variables for booking data to be stored or error states
     // from booking data, then assign values to those variables
-    const [bookedDates, setBookingData] = useState([]);
+    const [bookedData, setBookingData] = useState([]);
     const [bookingError, setBookedAPIError] = useState(null);
 
-    const [requestedDates, setRequestData] = useState([]);
+    const [requestData, setRequestData] = useState([]);
     const [requestError, setRequestAPIError] = useState(null);
 
     // this code actually populates variables
     useEffect(() => {
         // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/bookings/')
+        axios.get('/api/mybookings/')
             .then((response) => {
                 setBookingData(response.data);
             })
@@ -28,33 +28,34 @@ const ReservationPage = () => {
     // this code actually populates variables
     useEffect(() => {
       // Assume your API endpoint is 'http://yourapi.com/bookings'
-      axios.get('/api/requests/')
+      axios.get('/api/myrequests/')
           .then((response) => {
               setRequestData(response.data);
+              console.log(requestData);
           })
           .catch((err) => {
             setRequestAPIError(err.toString());
           });
     }, []); // Empty dependency array means this useEffect runs once when component mounts
 
-    const deleteBooking = (id) => {
-      axios.delete(`/api/bookings/${id}/`)
-          .then(() => {
-              // Remove the deleted booking from the state
-              const updatedBookings = bookedDates.filter(booking => booking.id !== id);
-              setBookingData(updatedBookings);
-          })
-          .catch(err => {
-              setBookedAPIError(err.toString());
-          });
-    };
+    // const deleteBooking = (id) => {
+    //   axios.delete(`/api/bookings/${id}/`)
+    //       .then(() => {
+    //           // Remove the deleted booking from the state
+    //           const updatedBookings = bookedData.filter(booking => booking.id !== id);
+    //           setBookingData(updatedBookings);
+    //       })
+    //       .catch(err => {
+    //           setBookedAPIError(err.toString());
+    //       });
+    // };
 
-
+    // Need to update this to create a cancellation request
     const deleteRequest = (id) => {
       axios.delete(`/api/requests/${id}/`)
           .then(() => {
               // Remove the deleted booking from the state
-              const updatedRequests = requestedDates.filter(request => request.id !== id);
+              const updatedRequests = requestData.filter(request => request.id !== id);
               setRequestData(updatedRequests);
           })
           .catch(err => {
@@ -70,9 +71,9 @@ const ReservationPage = () => {
               <h1>Pending Requests</h1>
           </div>
           {requestError && <p className="error">Error: {requestError}</p>}
-          {requestedDates.length > 0 ? (
+          {requestData.length > 0 ? (
               <ul>
-                  {requestedDates.map((request, index) => (
+                  {requestData.map((request, index) => (
                     
                       <li key={request.id}>
                         <div className='bookingItem'>
@@ -99,9 +100,9 @@ const ReservationPage = () => {
               <h1>Confirmed Reservations</h1>
           </div>
           {bookingError && <p className="error">Error: {bookingError}</p>}
-          {bookedDates.length > 0 ? (
+          {bookedData.length > 0 ? (
               <ul>
-                  {bookedDates.map((booking, index) => (
+                  {bookedData.map((booking, index) => (
                     
                       <li key={booking.id}>
                         <div className='bookingItem'>
@@ -114,7 +115,7 @@ const ReservationPage = () => {
                             <p>Message: <br></br>{booking.request_message}</p>
                             {/* Add other booking details you'd like to display here */}
                           </div>
-                          <button onClick={() => deleteBooking(booking.id)}>Cancel Reservation</button>
+                          {/* <button onClick={() => deleteBooking(booking.id)}>Cancel Reservation</button> */}
                         </div>
                       </li>
                     
