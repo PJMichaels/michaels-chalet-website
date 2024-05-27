@@ -41,6 +41,12 @@ class Bookings(models.Model):
         return self.title
 
 class Requests(models.Model):
+    booking = models.ForeignKey(
+        "Bookings",
+        on_delete=models.CASCADE,  # Deletes requests when booking is deleted
+        null=True,     # Allows the field to be optional
+        default=None                 
+    )
     created_by = models.CharField("Created By", max_length=120)
     creation_date = models.DateTimeField("Creation Date", auto_now_add=True)
     group_size = models.IntegerField(
