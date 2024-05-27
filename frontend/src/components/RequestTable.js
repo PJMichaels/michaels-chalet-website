@@ -3,15 +3,7 @@ import { useTable, useSortBy, useFilters } from 'react-table';
 import axios from 'axios';
 import './DataTable.css';
 
-const RequestTable = () => {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    // Fetch reservation data from API endpoint
-    axios.get('/api/requests/')
-      .then(response => setData(response.data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+const RequestTable = ({data, refreshData }) => {
 
   const ColumnFilter = ({ column }) => {
     const { filterValue, setFilter } = column;
@@ -76,8 +68,8 @@ const RequestTable = () => {
   
         if (deleteResponse.status === 200) {
           // Refresh table data
-          const updatedData = await axios.get('api/bookings/');
-          setData(updatedData.data);
+          // const updatedData = await axios.get('api/bookings/');
+          // setData(updatedData.data);
         } else {
           console.error('Error deleting the item');
         }
@@ -87,16 +79,19 @@ const RequestTable = () => {
     } catch (error) {
       console.error('Error during approve action:', error);
     }
+    refreshData();
   };
 
   const handleEdit = (row) => {
     // Implement your edit functionality here
     console.log('Edit row:', row);
+    refreshData();
   };
 
   const handleDelete = (id) => {
     // Implement your delete functionality here
     console.log('Delete row with ID:', id);
+    refreshData();
   };
 
   const tableInstance = useTable({ columns, data }, useFilters, useSortBy);
