@@ -1,38 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProvisioningManagement = () => {
+const ProvisioningManagement = ({provisionedData, refreshData}) => {
 
-// variables for booking data to be stored or error states
-    // from booking data, then assign values to those variables
-    const [availabilityData, setAvailabilityData] = useState([]);
-    const [responseError, setResponseError] = useState(null);
-
-    // this code actually populates variables
-    useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/availability/')
-            .then((response) => {
-                setAvailabilityData(response.data);
-            })
-            .catch((err) => {
-                setResponseError(err.toString());
-            });
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
+    // variables for booking data to be stored or error states
+    const [responseError, setResponseError] = useState(null); // not sure this is needed.. also not used
 
     const deleteProvisioned = (id) => {
       axios.delete(`/api/availability/${id}/`)
           .then(() => {
-              // Remove the deleted booking from the state
-              const updatedAvailability = availabilityData.filter(item => item.id !== id);
-              setAvailabilityData(updatedAvailability);
+              // reload data
+              refreshData();
           })
           .catch(err => {
             setResponseError(err.toString());
           });
   };
-  
-
     
     return (
       <div className='reservations-container'>
@@ -40,9 +23,9 @@ const ProvisioningManagement = () => {
               <h1>Provisioned Dates</h1>
           </div>
           {responseError && <p className="error">Error: {responseError}</p>}
-          {availabilityData.length > 0 ? (
+          {provisionedData.length > 0 ? (
               <ul>
-                  {availabilityData.map((item, index) => (
+                  {provisionedData.map((item, index) => (
                     
                       <li key={item.id}>
                         <div className='bookingItem'>
