@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTable, useSortBy, useFilters } from 'react-table';
+import Modal from 'react-modal';
 import axios from 'axios';
+import EditRequestForm from './EditRequestForm';
 import './DataTable.css';
 
 const RequestTable = ({data, refreshData }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const ColumnFilter = ({ column }) => {
     const { filterValue, setFilter } = column;
@@ -18,8 +22,14 @@ const RequestTable = ({data, refreshData }) => {
 
   const columns = useMemo(() => [
     {
-      Header: 'ID',
-      accessor: 'id',
+      Header: 'Request Type',
+      accessor: 'request_type',
+      Cell: ({ value }) => value.toUpperCase(), // Display the value in uppercase
+    },
+    {
+      Header: "Reservation ID",
+      accessor: 'booking_id',
+      Cell: ({ value }) => (value ? value : 'N/A'), // Customize the display of boolean values
     },
     {
       Header: 'Guest',
@@ -37,6 +47,10 @@ const RequestTable = ({data, refreshData }) => {
         Header: 'Group Size',
         accessor: 'group_size',
         Filter: ColumnFilter,
+    },
+    {
+      Header: 'Request Message',
+      accessor: 'request_message',
     },
     {
       Header: 'Actions',
@@ -83,14 +97,35 @@ const RequestTable = ({data, refreshData }) => {
   };
 
   const handleEdit = (row) => {
-    // Implement your edit functionality here
-    console.log('Edit row:', row);
+    // const requestObject = data.find(item => item.id === row.id);
+    setSelectedRow(row);
+    setModalIsOpen(true);
+    // refreshData();
+  };
+
+  const handleDelete = async (id) => {
+    // Implement your delete functionality here
+    console.log('Delete row with ID:', id);
+
+    try {
+      // Delete request on booking id
+      const deleteResponse = await axios.delete(`api/requests/${id}/`);
+
+      if (deleteResponse.status === 204) { // Check if the request was successful
+        console.log('delete successful');
+        
+      } else {
+        console.error('Error deleting request');
+      }
+    } catch (error) {
+      console.error('Error during deletion action:', error);
+    }
     refreshData();
   };
 
-  const handleDelete = (id) => {
-    // Implement your delete functionality here
-    console.log('Delete row with ID:', id);
+  const closeModal = () => {
+    setModalIsOpen(false);
+    // setSelectedRow(null); // comment out to get rid of null error
     refreshData();
   };
 
@@ -105,36 +140,48 @@ const RequestTable = ({data, refreshData }) => {
   } = tableInstance;
 
   return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render('Header')}
-                <span>
-                  {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                </span>
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                <td {...cell.getCellProps()}>
-                  {cell.render('Cell')}
-                </td>
+    <div>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                  </span>
+                </th>
               ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map(row => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => (
+                  <td {...cell.getCellProps()}>
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Edit Request"
+      >
+        <h2>Edit Request</h2>
+        <EditRequestForm requestObject= {selectedRow} closeModal = {closeModal}  />
+        {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
+        <button onClick={closeModal}>Close</button>
+      </Modal>
+    </div>
   );
 };
 
