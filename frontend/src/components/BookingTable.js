@@ -3,11 +3,10 @@ import { useTable, useSortBy, useFilters } from 'react-table';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import axios from 'axios';
-import EditRequestForm from './EditRequestForm';
+import EditBookingForm from './EditBookingForm';
 import './DataTable.css';
 
 const BookingTable = ({data, refreshData}) => {
-  // const [data, setData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -41,9 +40,26 @@ const BookingTable = ({data, refreshData}) => {
       accessor: 'departure_date',
     },
     {
-        Header: 'Group Size',
-        accessor: 'group_size',
-        Filter: ColumnFilter,
+      Header: 'Group Size',
+      accessor: 'group_size',
+      Filter: ColumnFilter,
+    },
+    {
+      Header: 'Request Message',
+      accessor: 'request_message',
+    },
+    {
+      Header: 'Price',
+      accessor: 'price',
+    },
+    {
+      Header: 'Payment Received?',
+      accessor: 'payment_received',
+      Cell: ({ value }) => (value ? 'Yes' : 'No'), // Customize the display of boolean values
+    },
+    {
+      Header: 'Admin Note',
+      accessor: 'admin_note',
     },
     {
       Header: 'Actions',
@@ -61,7 +77,7 @@ const BookingTable = ({data, refreshData}) => {
     // const requestObject = data.find(item => item.id === row.id);
     setSelectedRow(row);
     setModalIsOpen(true);
-    refreshData();
+    // refreshData();
   };
 
 
@@ -140,7 +156,7 @@ const BookingTable = ({data, refreshData}) => {
         contentLabel="Edit Request"
       >
         <h2>Edit Request</h2>
-        <EditRequestForm requestObject= {selectedRow} closeModal = {closeModal} />
+        <EditBookingForm requestObject= {selectedRow} closeModal = {closeModal}  />
         {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
         <button onClick={closeModal}>Close</button>
       </Modal>
