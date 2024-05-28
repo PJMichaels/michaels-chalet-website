@@ -41,7 +41,7 @@ const ReservationManagementPage = () => {
   return (
     
     <div className="App">
-      <h1>New Reservations Requests</h1>
+      <h1>New Requests</h1>
       <RequestTable data={requestData} refreshData={fetchData} />
       <h1>Reservation Management</h1>
       <BookingTable data={bookingData} refreshData={fetchData} />
