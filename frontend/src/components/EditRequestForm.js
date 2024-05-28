@@ -16,8 +16,8 @@ const EditRequestForm = ({requestObject, closeModal}) => {
         id: requestObject.id,
         arrivalDate: requestObject.arrival_date,
         departureDate: requestObject.departure_date,
-        requestMessage: requestObject.request_message,
         groupSize: requestObject.group_size,
+        requestMessage: requestObject.request_message,
     });
 
     useEffect(() => {
@@ -50,16 +50,16 @@ const EditRequestForm = ({requestObject, closeModal}) => {
         return [year, month, day].join('-');
     }
 
-const navigate = useNavigate();
+// const navigate = useNavigate();
 
-  const redirectToPage = () => {
-    navigate('/reservation-management');}
+//   const redirectToPage = () => {
+//     navigate('/reservation-management');}
 
     const handleSubmit = (e) => {
         e.preventDefault();
         // console.log("Placeholder for API call")
         // Post booking request to Django backend
-        Axios.patch(`/api/bookings/${formData.id}/`, {
+        Axios.patch(`/api/requests/${formData.id}/`, {
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
@@ -68,7 +68,6 @@ const navigate = useNavigate();
             .then((response) => {
                 console.log(response.data);
                 closeModal();
-                redirectToPage();
             })
             .catch((error) => {
                 // This error should really be in a modal long term
@@ -80,7 +79,8 @@ const navigate = useNavigate();
     return (
         <div>
          <form onSubmit={handleSubmit}>
-                 <label>Editing Booking ID: {requestObject.id}</label><br></br>
+                 {requestObject.booking ? <label>Editting Booking ID: {requestObject.booking}</label> : <label>Editting New Reservation Request</label>}
+                 <br></br>
                  <label>Number of Guests: {formData.groupSize}</label>
                  <input type="range" min='1' max='8' defaultValue={requestObject.group_size} name="groupSize" onChange={handleChange} required /><br></br>
                  <label>Arrival Date:</label>
