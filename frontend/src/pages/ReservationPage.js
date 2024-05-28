@@ -1,76 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { fetchMyBookingsData, fetchMyRequestsData } from '../utilities/api_funcs';
 import './ReservationPage.css'
 
 const ReservationPage = () => {
 
 // variables for booking data to be stored or error states
     // from booking data, then assign values to those variables
-    const [bookedData, setBookingData] = useState([]);
-    const [bookingError, setBookedAPIError] = useState(null);
-
+    const [bookingData, setBookingData] = useState([]);
     const [requestData, setRequestData] = useState([]);
-    const [requestError, setRequestAPIError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // this code actually populates variables
-    useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/mybookings/')
-            .then((response) => {
-                setBookingData(response.data);
-            })
-            .catch((err) => {
-              setBookedAPIError(err.toString());
-            });
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
-
-
-    // this code actually populates variables
-    useEffect(() => {
-      // Assume your API endpoint is 'http://yourapi.com/bookings'
-      axios.get('/api/myrequests/')
-          .then((response) => {
-              setRequestData(response.data);
-              console.log(requestData);
-          })
-          .catch((err) => {
-            setRequestAPIError(err.toString());
-          });
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
-
-    // const deleteBooking = (id) => {
-    //   axios.delete(`/api/bookings/${id}/`)
-    //       .then(() => {
-    //           // Remove the deleted booking from the state
-    //           const updatedBookings = bookedData.filter(booking => booking.id !== id);
-    //           setBookingData(updatedBookings);
-    //       })
-    //       .catch(err => {
-    //           setBookedAPIError(err.toString());
-    //       });
-    // };
-
-    // Need to update this to create a cancellation request
-    const deleteRequest = (id) => {
-      axios.delete(`/api/requests/${id}/`)
-          .then(() => {
-              // Remove the deleted booking from the state
-              const updatedRequests = requestData.filter(request => request.id !== id);
-              setRequestData(updatedRequests);
-          })
-          .catch(err => {
-              setRequestAPIError(err.toString());
-          });
+    // Function to fetch data from both APIs
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+          const [bookingData, requestData] = await Promise.all([fetchMyBookingsData(), fetchMyRequestsData()]);
+          setBookingData(bookingData);
+          setRequestData(requestData);
+      } catch (err) {
+          setError(err.message);
+      } finally {
+          setLoading(false);
+      }
     };
-  
 
-    
+  // Fetch data when the component mounts
+  useEffect(() => {
+      fetchData();
+  }, []);
+
+  // If loading, show a loading message
+  if (loading) return <div>Loading...</div>;
+
+  // If there's an error, show an error message
+  if (error) return <div>Error: {error}</div>;
+
+  // Need to update this to create a cancellation request
+  const deleteRequest = (id) => {
+    axios.delete(`/api/requests/${id}/`)
+        .then(() => {
+            // Refresh data
+            console.log('Deleted Request')
+            fetchData();
+        })
+        .catch(err => {
+            setError(err.message);
+        });
+  };
+  
     return (
       <div className='reservations-container'>
           <div className='reservations-header'>
               <h1>Pending Requests</h1>
           </div>
-          {requestError && <p className="error">Error: {requestError}</p>}
+          {/* {requestError && <p className="error">Error: {requestError}</p>} */}
           {requestData.length > 0 ? (
               <ul>
                   {requestData.map((request, index) => (
@@ -86,10 +72,9 @@ const ReservationPage = () => {
                             <p>Message: <br></br>{request.request_message}</p>
                             {/* Add other booking details you'd like to display here */}
                           </div>
-                          <button onClick={() => deleteRequest(request.id)}>Delete</button>
+                          <button onClick={() => deleteRequest(request.id)}>Cancel</button>
                         </div>
                       </li>
-                    
                   ))}
               </ul>
           ) : (
@@ -99,10 +84,10 @@ const ReservationPage = () => {
       <div className='reservations-header'>
               <h1>Confirmed Reservations</h1>
           </div>
-          {bookingError && <p className="error">Error: {bookingError}</p>}
-          {bookedData.length > 0 ? (
+          {/* {bookingError && <p className="error">Error: {bookingError}</p>} */}
+          {bookingData.length > 0 ? (
               <ul>
-                  {bookedData.map((booking, index) => (
+                  {bookingData.map((booking, index) => (
                     
                       <li key={booking.id}>
                         <div className='bookingItem'>
