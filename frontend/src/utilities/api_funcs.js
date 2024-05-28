@@ -6,6 +6,17 @@ import axios from 'axios';
 const BASE_URL = '/api/';
 
 
+// Function to fetch data from booking endpoint
+export const fetchProvisionedData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/availability/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 // Function to fetch data from request endpoint
 export const fetchRequestsData = async () => {
   try {
@@ -17,16 +28,38 @@ export const fetchRequestsData = async () => {
 };
 
 
+// Function to fetch data from request endpoint
+export const fetchMyRequestsData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/myrequests/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 // Function to fetch data from booking endpoint
 export const fetchBookingsData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/bookings/`);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    const response = await axios.get(`${BASE_URL}/bookings/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
+
+// Function to fetch data from booking endpoint
+export const fetchMyBookingsData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/mybookings/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+  
 
 // export const fetchUsers = async () => {
 //     return fetch(API_ENDPOINT).then(res => res.json());
