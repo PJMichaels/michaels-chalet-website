@@ -4,13 +4,12 @@ import Axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 // import './BookingForm.css'
 
-const EditRequestForm = ({requestObject, closeModal}) => {
+const EditRequestForm = ({requestObject, closeModal, request_type='new'}) => {
 
     // test to differentiate booking vs request
     // if (requestObject.includes('status')) {
 
     // }
-    const {isLoading, username } = useAuth();
 
     const [formData, setFormData] = useState({
         id: requestObject.id,
@@ -63,7 +62,8 @@ const EditRequestForm = ({requestObject, closeModal}) => {
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
-            "request_message": formData.requestMessage
+            "request_message": formData.requestMessage,
+            "request_type": request_type,
         })
             .then((response) => {
                 console.log(response.data);
