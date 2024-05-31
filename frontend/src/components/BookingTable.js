@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTable, useSortBy, useFilters } from 'react-table';
-import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
 import axios from 'axios';
 import EditBookingForm from './EditBookingForm';
