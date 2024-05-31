@@ -61,6 +61,42 @@ export const fetchMyBookingsData = async () => {
 };
   
 
+// Function to fetch data from booking endpoint
+export const postBookingChangeRequest = async (bookingObject, request_type) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/myrequests/`, {
+      "booking": bookingObject.id,
+      "created_by": bookingObject.created_by,
+      "group_size": bookingObject.group_size,
+      "arrival_date": bookingObject.arrival_date,
+      "departure_date": bookingObject.departure_date,
+      "request_message": bookingObject.request_message,
+      "request_type": request_type,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// axios.post(`/api/myrequests/`, {
+//   "booking": bookingObject.id,
+//   "created_by": bookingObject.created_by,
+//   "group_size": bookingObject.group_size,
+//   "arrival_date": bookingObject.arrival_date,
+//   "departure_date": bookingObject.departure_date,
+//   "request_message": bookingObject.request_message,
+//   "request_type": "cancellation"
+// })
+//   .then((response) => {
+//       console.log(response.data);
+//       fetchData();
+//   })
+//   .catch((error) => {
+//       // This error should really be in a modal long term
+//       console.error("An error occurred while posting data: ", error);
+//   });
 // export const fetchUsers = async () => {
 //     return fetch(API_ENDPOINT).then(res => res.json());
 // };
