@@ -4,12 +4,7 @@ import Axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 // import './BookingForm.css'
 
-const EditRequestForm = ({requestObject, closeModal, request_type='new'}) => {
-
-    // test to differentiate booking vs request
-    // if (requestObject.includes('status')) {
-
-    // }
+const EditRequestForm = ({requestObject, closeModal}) => {
 
     const [formData, setFormData] = useState({
         id: requestObject.id,
@@ -22,11 +17,13 @@ const EditRequestForm = ({requestObject, closeModal, request_type='new'}) => {
     useEffect(() => {
         setFormData(formData => ({
             ...formData,
-            arrivalDate: new Date(requestObject.arrival_date), //.toISOString().split('T')[0],
-            departureDate: new Date(requestObject.departure_date) //.toISOString().split('T')[0],
+            arrivalDate: new Date(requestObject.arrival_date),
+            departureDate: new Date(requestObject.departure_date)
         }));
     }, [requestObject.arrival_date, requestObject.departure_date]); // Update state when props change
 
+
+    
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -49,11 +46,6 @@ const EditRequestForm = ({requestObject, closeModal, request_type='new'}) => {
         return [year, month, day].join('-');
     }
 
-// const navigate = useNavigate();
-
-//   const redirectToPage = () => {
-//     navigate('/reservation-management');}
-
     const handleSubmit = (e) => {
         e.preventDefault();
         // console.log("Placeholder for API call")
@@ -63,7 +55,6 @@ const EditRequestForm = ({requestObject, closeModal, request_type='new'}) => {
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
             "request_message": formData.requestMessage,
-            "request_type": request_type,
         })
             .then((response) => {
                 console.log(response.data);
