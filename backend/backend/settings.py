@@ -114,6 +114,8 @@ DATABASES = {
 #   }
 # }
 
+# Added to faciliate a custom user model
+AUTH_USER_MODEL = 'chaletsync.UserProfile'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

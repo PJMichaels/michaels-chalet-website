@@ -4,16 +4,56 @@ from rest_framework import viewsets
 from django.contrib.auth.models import Group, User
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 # from rest_framework.views import APIView
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
-from .models import Bookings, Availability, Requests
+from .models import UserProfile, Bookings, Availability, Requests
 
 # view for admin add/update/delete users - not sure about passwords
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, IsAdminUser)
-    serializer_class = UserSerializer
-    # queryset = User.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    queryset = UserProfile.objects.all()
+    serializer_class = AdminUserSerializer
+
+
+# view for a user to view or update their own profile details
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+# change password view
+class PasswordChangeView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PasswordChangeSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # Check old password
+        if not user.check_password(serializer.validated_data['old_password']):
+            return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Set new password
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+        return Response({"status": "password set"}, status=status.HTTP_200_OK)
 
 
 # view for admin to add/update/delete all bookings
@@ -90,22 +130,4 @@ class MyRequestsView(viewsets.ModelViewSet):
 # create a view or serializer for bookings only for the the current user
 
 # eventually add views for float trips, guest book, etc..
-
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    queryset = User.objects.all()
-    serializer_class = AdminUserSerializer
-
-
-# class MyUserView(generics.RetrieveUpdateAPIView):
-#     serializer_class = UserSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_object(self):
-#         # Ensure the user can only access their own information
-#         return self.request.user
-
-#     def partial_update(self, request, *args, **kwargs):
-#         kwargs['partial'] = True
-#         return self.update(request, *args, **kwargs)
 

@@ -1,5 +1,27 @@
 from django.contrib import admin
-from .models import Bookings, Availability
+from django.contrib.auth.admin import UserAdmin
+from .forms import UserProfileCreationForm, UserProfileChangeForm
+from .models import UserProfile, Bookings, Availability
+
+class UserProfileAdmin(UserAdmin):
+    add_form = UserProfileCreationForm
+    form = UserProfileChangeForm
+    model = UserProfile
+    list_display = ('email', 'name', 'phone', 'is_staff', 'is_active')
+    list_filter = ('is_staff', 'is_active')
+    fieldsets = (
+        (None, {'fields': ('email', 'name', 'phone', 'password')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'name', 'phone', 'password1', 'password2', 'is_staff', 'is_active')}
+        ),
+    )
+    search_fields = ('email',)
+    ordering = ('email',)
 
 class AvailabilityAdmin(admin.ModelAdmin):
     list_display = ('reason', 'start_date', 'end_date')
@@ -22,6 +44,8 @@ class BookingsAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
+
+admin.site.register(UserProfile, UserProfileAdmin)
 
 admin.site.register(Availability, AvailabilityAdmin)
 
