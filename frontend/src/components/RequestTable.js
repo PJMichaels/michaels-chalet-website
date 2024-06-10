@@ -28,7 +28,7 @@ const RequestTable = ({data, refreshData }) => {
     },
     {
       Header: "Reservation ID",
-      accessor: 'booking_id',
+      accessor: 'booking',
       Cell: ({ value }) => (value ? value : 'N/A'), // Customize the display of boolean values
     },
     {
@@ -66,8 +66,22 @@ const RequestTable = ({data, refreshData }) => {
 
   const handleApprove = async (row) => {
     try {
-      // First API request to create a new item in the booking database
-      const bookingResponse = await axios.post('api/bookings/', {
+      var bookingResponse; 
+
+      if (row.booking) {
+        // First API request to create a new item in the booking database
+        bookingResponse = await axios.patch(`api/bookings/${row.booking}/`, {
+          created_by: row.created_by,
+          arrival_date: row.arrival_date,
+          departure_date: row.departure_date,
+          group_size: row.group_size,
+          status: 'scheduled',
+          // Add any other necessary fields
+        });
+      }
+      else {
+        // First API request to create a new item in the booking database
+      bookingResponse = await axios.post('api/bookings/', {
         created_by: row.created_by,
         arrival_date: row.arrival_date,
         departure_date: row.departure_date,
@@ -75,8 +89,10 @@ const RequestTable = ({data, refreshData }) => {
         status: 'scheduled',
         // Add any other necessary fields
       });
+      }
+      
   
-      if (bookingResponse.status === 201) { // Check if the first request was successful
+      if (bookingResponse.status === 201 | bookingResponse.status === 200) { // Check if the first request was successful
         // Second API request to delete the item from the request endpoint
         const deleteResponse = await axios.delete(`api/requests/${row.id}/`);
   
