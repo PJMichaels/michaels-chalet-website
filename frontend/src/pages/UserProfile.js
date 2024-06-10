@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
-import { fetchMyUserData, changeUserPassword } from '../utilities/api_funcs';
+import { fetchMyUserData } from '../utilities/api_funcs';
 
 const UserProfilePage = () => {
   const [userData, setUserData] = useState({});
