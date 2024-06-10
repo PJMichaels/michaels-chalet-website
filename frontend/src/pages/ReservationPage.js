@@ -98,7 +98,6 @@ const ReservationPage = () => {
                     <li key={request.id}>
                       <div className='bookingItem'>
                         <div className='bookingLeftSide'>
-                          <h2>{request.created_by}</h2>
                           <p>Booking Dates: {request.arrival_date} - {request.departure_date}</p>
                           <p>Group Size: {request.group_size}</p>
                           <p>Request Type: {request.request_type}</p>
@@ -128,7 +127,6 @@ const ReservationPage = () => {
                     <li key={booking.id}>
                       <div className='bookingItem'>
                         <div className='bookingLeftSide'>
-                          <h2>{booking.created_by}</h2>
                           <p>Booking Dates: {booking.arrival_date} - {booking.departure_date}</p>
                           <p>Group Size: {booking.group_size}</p>
                         </div>
