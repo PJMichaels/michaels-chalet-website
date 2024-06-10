@@ -49,6 +49,55 @@ export const fetchBookingsData = async () => {
   }
 };
 
+// Function to fetch users from user endpoint
+export const fetchUserData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Function to fetch users from user endpoint
+export const fetchMyUserData = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/profile/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// export const updateUserProfile = async (profileData) => {
+//   try {
+//     const response = await axios.put(`${BASE_URL}/profile/`, {
+//       "email": profileData.email,
+//       "name": profileData.name,
+//       "phone": profileData.phone,
+//     });
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+// export const updateUserProfile = async (profileData) => {
+//   console.log(profileData);
+//   try {
+//     const response = await axios.get(`${BASE_URL}/mybookings/`);
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+
+//   return axios.put(`${BASE_URL}/profile/`, profileData);
+// };
+
+export const changeUserPassword = async (passwordData) => {
+  return axios.put(`${BASE_URL}/profile/change-password/`, passwordData);
+};
 
 // Function to fetch data from booking endpoint
 export const fetchMyBookingsData = async () => {
