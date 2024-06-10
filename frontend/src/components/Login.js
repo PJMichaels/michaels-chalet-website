@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'; // Import useAuth from your Au
 
 
 const Login = () => {     
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');     
     const navigate = useNavigate();
     const location = useLocation();
@@ -19,7 +19,7 @@ const Login = () => {
 
         try {
             // Use the login function from your AuthContext
-            await auth.login(username, password);
+            await auth.login(email, password);
 
             // Navigate to the previous page or to the home page if no previous page is found
             navigate(from, { replace: true });
@@ -36,15 +36,15 @@ const Login = () => {
                 <div className="Auth-form-content">
                     <h3 className="Auth-form-title">Sign In</h3>
                     <div className="form-group mt-3">
-                        <label>Username</label>
+                        <label>Email</label>
                         <input 
                             className="form-control mt-1" 
-                            placeholder="Enter Username" 
-                            name="username"  
+                            placeholder="Enter Email" 
+                            name="email"  
                             type="text" 
-                            value={username}
+                            value={email}
                             required 
-                            onChange={e => setUsername(e.target.value)}
+                            onChange={e => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="form-group mt-3">
