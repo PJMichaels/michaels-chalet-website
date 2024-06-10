@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 
 
 const RequestForm = ({arrival_date, departure_date}) => {
-    const {isLoading, username } = useAuth();
+    const {isLoading, userID, userName } = useAuth();
     const [formData, setFormData] = useState({
         arrivalDate: arrival_date.toDateString(),
         departureDate: departure_date.toDateString(),
@@ -49,10 +49,11 @@ const navigate = useNavigate();
     navigate('/reservations/');}
 
     const handleSubmit = (e) => {
+        console.log(userID);
         e.preventDefault();
         // Post booking request to Django backend
         Axios.post('/api/myrequests/', {
-            "created_by": username,
+            "created_by": userID,
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),
             "departure_date": formatDate(formData.departureDate),
@@ -69,10 +70,13 @@ const navigate = useNavigate();
             });
     };
 
+    // If loading, show a loading message
+    if (isLoading) return <div>Loading...</div>;
+
     return (
         <div className="content-container">
          <form onSubmit={handleSubmit}>
-                 <label>Guest Name: {username}</label>
+                 <label>Guest Name: {userName}</label>
                  {/* <input type="text" name="createdBy" onChange={handleChange} required /> */}
                  <label>Number of Guests: {formData.groupSize}</label>
                  <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
