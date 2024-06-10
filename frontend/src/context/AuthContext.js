@@ -9,8 +9,9 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userID, setUserID] = useState('');
     const [userEmail, setUserEmail] = useState('');
-    const [username, setUsername] = useState('');
+    const [userName, setUserName] = useState('');
     const [userGroups, setUserGroups] = useState([]);
 
     // function to extract user and group from token
@@ -18,13 +19,15 @@ export const AuthProvider = ({ children }) => {
     const decodeToken = (token) => {
         try {
             const decoded = jwtDecode(token);
+            setUserID(decoded.user_id || '');
             setUserEmail(decoded.email || '');
-            setUsername(decoded.username || '');
+            setUserName(decoded.name || '');
             setUserGroups(decoded.groups || []);
         } catch (error) {
             console.error('Error decoding token', error);
+            setUserID('');
             setUserEmail('');
-            setUsername('');
+            setUserName('');
             setUserGroups([]); // Fallback to default values
         }
     };
@@ -34,8 +37,9 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('access_token');
         if (!token) {
             setIsLoggedIn(false);
+            setUserID('');
             setUserEmail('');
-            setUsername('');
+            setUserName('');
             setUserGroups([]); // Ensure default values are set
             setIsLoading(false);
             return;
@@ -63,9 +67,9 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     // Provide a login function that updates the isLoggedIn state
-    const login = async (username, password) => {
+    const login = async (email, password) => {
         try {
-            const { data } = await axios.post('/api/token/', { username, password });
+            const { data } = await axios.post('/api/token/', { email, password });
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
@@ -80,8 +84,9 @@ export const AuthProvider = ({ children }) => {
         localStorage.clear();
         delete axios.defaults.headers.common['Authorization'];
         setIsLoggedIn(false);
+        setUserID('');
         setUserEmail('');
-        setUsername('');
+        setUserName('');
         setUserGroups([]);
         window.location.href = '/';
     };
@@ -107,7 +112,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, isLoading, userEmail, username, userGroups, login, logout, validateToken }}>
+        <AuthContext.Provider value={{ isLoggedIn, isLoading, userID, userEmail, userName, userGroups, login, logout, validateToken }}>
             {children}
         </AuthContext.Provider>
     );
