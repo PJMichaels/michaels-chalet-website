@@ -54,11 +54,20 @@ function refreshPage() {
     };
 
     return (
-        <div className="booking-form">
+        <div>
          <form onSubmit={handleSubmit}>
                  <label>Reason For Availability:</label>
-                 <textarea name="reason" onChange={handleChange} required></textarea>
-             <button className="button" type="submit">Provision Dates</button>
+                 <br></br>
+                 <textarea 
+                    name="reason" 
+                    className='text-black w-full m-2 p-2'
+                    onChange={handleChange} 
+                    required></textarea>
+             <button 
+                type="submit"
+                className='bg-blue-500 text-white w-full py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+                >Provision Dates
+            </button>
          </form>
      </div>
     );

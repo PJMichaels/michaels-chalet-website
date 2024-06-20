@@ -68,21 +68,72 @@ const EditRequestForm = ({requestObject, closeModal}) => {
     };
 
     return (
-        <div>
-         <form onSubmit={handleSubmit}>
-                 {requestObject.booking ? <label>Editting Booking ID: {requestObject.booking}</label> : <label>Editting New Reservation Request</label>}
-                 <br></br>
-                 <label>Number of Guests: {formData.groupSize}</label>
-                 <input type="range" min='1' max='8' defaultValue={requestObject.group_size} name="groupSize" onChange={handleChange} required /><br></br>
-                 <label>Arrival Date:</label>
-                 <input type="date" defaultValue={formData.arrivalDate} name="arrivalDate" onChange={handleChange} required />
-                 <label>Departure Date:</label>
-                 <input type="date" defaultValue={formData.departureDate} name="departureDate" onChange={handleChange} required />
-                 <label>Request Message:</label>
-                 <textarea name="requestMessage" defaultValue={formData.requestMessage} onChange={handleChange} required></textarea>
-             <button className="button" type="submit">Update Reservation</button>
-         </form>
-     </div>
+        <div className="max-w-xl mx-auto mt-11 p-4 bg-white shadow-md rounded-md">
+            <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                    {requestObject.booking ? 
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Editing Booking ID: {requestObject.booking}</label> :
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Editing New Reservation Request</label>}
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Number of Guests: {formData.groupSize}</label>
+                    <input 
+                        type="range" 
+                        min="1" 
+                        max="8" 
+                        defaultValue={requestObject.group_size} 
+                        name="groupSize" 
+                        onChange={handleChange} 
+                        required 
+                        className="w-full" 
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Arrival Date:</label>
+                    <input 
+                        type="date" 
+                        defaultValue={formData.arrivalDate} 
+                        name="arrivalDate" 
+                        onChange={handleChange} 
+                        required 
+                        className="w-full px-3 py-2 border rounded-md" 
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Departure Date:</label>
+                    <input 
+                        type="date" 
+                        defaultValue={formData.departureDate} 
+                        name="departureDate" 
+                        onChange={handleChange} 
+                        required 
+                        className="w-full px-3 py-2 border rounded-md" 
+                    />
+                </div>
+                <div className="mb-4">
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Request Message:</label>
+                    <textarea 
+                        name="requestMessage" 
+                        defaultValue={formData.requestMessage} 
+                        onChange={handleChange} 
+                        required 
+                        className="w-full px-3 py-2 border rounded-md"
+                    ></textarea>
+                </div>
+                <button 
+                    type="submit" 
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                    Update Reservation
+                </button>
+                <button 
+                    onClick={closeModal}
+                    className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 float-end"
+                    >
+                    Cancel
+                </button>
+            </form>
+        </div>
     );
 };
 
