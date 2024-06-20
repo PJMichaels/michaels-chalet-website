@@ -7,10 +7,12 @@ table {
     padding: 10px;
     border: 1px solid #ddd;
     text-align: left;
+    color: white;
   }
   
   th {
     cursor: pointer;
     background-color: #f2f2f2;
+    color: black;
   }
   

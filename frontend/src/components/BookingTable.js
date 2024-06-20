@@ -16,8 +16,35 @@ const BookingTable = ({data, refreshData}) => {
       <input
         value={filterValue || ''}
         onChange={e => setFilter(e.target.value || undefined)}
-        placeholder={`Search ${column.id}`}
+        placeholder={`Search ${column.Header}`}
       />
+    );
+  };
+
+  const DateFilter = ({ column }) => {
+    const { filterValue = ['', ''], setFilter } = column;
+  
+    return (
+      <div>
+        <input
+          type="date"
+          value={filterValue[0] || ''}
+          onChange={e => {
+            const val = e.target.value;
+            setFilter((old = ['', '']) => [val, old[1]]);
+          }}
+          placeholder="From"
+        />
+        <input
+          type="date"
+          value={filterValue[1] || ''}
+          onChange={e => {
+            const val = e.target.value;
+            setFilter((old = ['', '']) => [old[0], val]);
+          }}
+          placeholder="To"
+        />
+      </div>
     );
   };
 
@@ -25,47 +52,70 @@ const BookingTable = ({data, refreshData}) => {
     {
       Header: 'ID',
       accessor: 'id',
+      allowFilter: false,
     },
     {
       Header: 'Guest',
-      accessor: 'created_by',
+      accessor: 'created_by.name',
+      Filter: ColumnFilter,
+      allowFilter: true,
     },
     {
       Header: 'Arrival',
       accessor: 'arrival_date',
+      // Filter: DateFilter,
+      // filter: 'dateRange',
+      allowFilter: false,
     },
     {
       Header: 'Departure',
       accessor: 'departure_date',
+      // Filter: DateFilter,
+      // filter: 'dateRange',
+      allowFilter: false,
     },
     {
       Header: 'Group Size',
       accessor: 'group_size',
-      Filter: ColumnFilter,
+      allowFilter: false,
     },
     {
       Header: 'Request Message',
       accessor: 'request_message',
+      allowFilter: false,
     },
     {
       Header: 'Price',
       accessor: 'price',
+      allowFilter: false,
     },
     {
       Header: 'Payment Received?',
       accessor: 'payment_received',
-      Cell: ({ value }) => (value ? 'Yes' : 'No'), // Customize the display of boolean values
+      Cell: ({ value }) => (value ? 'Yes' : 'No'),
+      allowFilter: false,
     },
     {
       Header: 'Admin Note',
       accessor: 'admin_note',
+      allowFilter: false,
     },
     {
       Header: 'Actions',
       Cell: ({ row }) => (
         <div>
-          <button onClick={() => handleEdit(row.original)}>Edit</button>
-          <button onClick={() => handleDelete(row.original.id)}>Delete</button>
+          <button
+            onClick={() => handleEdit(row.original)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => handleDelete(row.original.id)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-red-600 transition duration-300'
+          >
+            Delete
+          </button>
         </div>
       ),
     },
@@ -107,8 +157,50 @@ const BookingTable = ({data, refreshData}) => {
     refreshData();
   };
 
-  const tableInstance = useTable({ columns, data }, useFilters, useSortBy);
+  const filterTypes = useMemo(() => ({
+    dateRange: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const rowValue = row.values[id];
+        if (!filterValue[0] && !filterValue[1]) return true;
+        if (filterValue[0] && filterValue[1]) {
+          return rowValue >= filterValue[0] && rowValue <= filterValue[1];
+        }
+        if (filterValue[0]) {
+          return rowValue >= filterValue[0];
+        }
+        if (filterValue[1]) {
+          return rowValue <= filterValue[1];
+        }
+        return true;
+      });
+    },
+    text: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const rowValue = row.values[id];
+        return String(rowValue).toLowerCase().includes(String(filterValue).toLowerCase());
+      });
+    },
+  }), []);
 
+
+  const tableInstance = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy: [
+          {
+            id: 'arrival_date',
+            desc: false,
+          },
+        ],
+      },
+      filterTypes,
+    },
+    useFilters,
+    useSortBy,
+  );
+  
   const {
     getTableProps,
     getTableBodyProps,
@@ -126,9 +218,8 @@ const BookingTable = ({data, refreshData}) => {
               {headerGroup.headers.map(column => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                  </span>
+                  {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                  <div>{column.allowFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>
@@ -153,13 +244,11 @@ const BookingTable = ({data, refreshData}) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Edit Request"
+        className='bg-none'
       >
-        <h2>Edit Request</h2>
-        <EditBookingForm requestObject= {selectedRow} closeModal = {closeModal}  />
-        {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
-        <button onClick={closeModal}>Close</button>
+        <EditBookingForm requestObject={selectedRow} closeModal={closeModal} />
       </Modal>
-    </div>
+  </div>
   );
 };
 

@@ -25,30 +25,47 @@ const UsersTable = ({data, refreshData}) => {
     {
       Header: 'ID',
       accessor: 'id',
+      allowFilter: false,
     },
     {
       Header: 'Email',
       accessor: 'email',
+      allowFilter: false,
     },
     {
       Header: 'Name',
-      accessor: 'name'
+      accessor: 'name',
+      allowFilter: true,
+      Filter: ColumnFilter,
     },
     {
       Header: 'Phone',
-      accessor: 'phone'
+      accessor: 'phone',
+      allowFilter: false,
     },
     {
       Header: 'Groups',
       accessor: 'groups',
+      allowFilter: false,
       Cell: ({ value }) => (value[0]), // Get Group at index 0
     },
     {
       Header: 'Actions',
+      allowFilter: false,
       Cell: ({ row }) => (
         <div>
-          <button onClick={() => handleEdit(row.original)}>Edit</button>
-          <button onClick={() => handleDelete(row.original.id)}>Delete</button>
+          <button 
+            onClick={() => handleEdit(row.original)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+          >
+            Edit
+          </button>
+          <button 
+            onClick={() => handleDelete(row.original.id)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-red-600 transition duration-300'
+          >
+            Delete
+          </button>
         </div>
       ),
     },
@@ -109,9 +126,8 @@ const UsersTable = ({data, refreshData}) => {
               {headerGroup.headers.map(column => (
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render('Header')}
-                  <span>
-                    {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                  </span>
+                  {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                  <div>{column.allowFilter ? column.render('Filter') : null}</div>
                 </th>
               ))}
             </tr>
@@ -136,11 +152,10 @@ const UsersTable = ({data, refreshData}) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Edit User"
+        className='bg-none'
       >
-        <h2>Edit User Data</h2>
         <EditUserForm userObject= {selectedRow} closeModal = {closeModal}  />
         {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
-        <button onClick={closeModal}>Close</button>
       </Modal>
     </div>
   );
