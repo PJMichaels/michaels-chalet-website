@@ -1,18 +1,36 @@
 import React from 'react';
-import ImageSlider from '../components/ImageSlider';
-import './HomePage.css';
 
 const HomePage = () => {
 
-
-
   return (
-    <div>
-      {/* <h1>Hello, this is the Home Page!</h1> */}
-      <div className="content-container">
-        <ImageSlider />
-      </div>
-      
+    <div className='bg-black bg-opacity-80 p-4 m-8 h-full rounded-lg shadow-lg'>
+      {/* <h1 className='text-white text-3xl p-2 m-2'>Welcome to our mountain home!</h1> */}
+      <div className='flex'>
+          <img 
+            src= '../../Photos/static/home-page.jpg' 
+            alt='Could not load'
+            className='rounded-lg'
+          >
+          </img>
+          <div className='bg-gray-800 mx-10 border-2 rounded-sm py-4'>
+            <h1 className='text-white text-3xl text-center'>Welcome to our mountain home!</h1>
+            {/* <h2 className='text-white text-2xl text-center'>We're excited to share our home with you!</h2> */}
+            <p className='text-white text-xl p-4'>
+              We're excited to share our home with you. Set back against the trees, our home offers a 
+              quiet retreat with easy access to all North Conway has to offer.
+            </p>
+            <p className='text-white text-xl p-4'>
+              The house is located minutes from beautiful hikes, lively breweries, and shopping at 
+              the outlets. In the winter we are 20 minutes from Attitash and Cranmore Mountains, and
+              about 40 minutes from Wildcat and Loon.
+            </p>
+            <p className='text-white text-xl p-4'>
+              This is a two bedroom house with an office that serves as a 3rd bedroom. It can comfortably accomodate
+              a group of 8. There are 2 living areas and 2 bathrooms, an open concept kitchen, and plenty of space to relax.
+            </p>
+          </div>
+
+        </div>
     </div>
   );
 };

@@ -1,0 +1,13 @@
+/* src/styles/global.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+body {
+  @apply m-0 font-sans bg-cover bg-center bg-fixed;
+  /* background-image: url('https://qcexclusive.com/wp-content/uploads/2016/12/white_mountains-1024x640.jpg'); */
+  background-image: url('../../public/Photos/backgrounds/cranmore-beach.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

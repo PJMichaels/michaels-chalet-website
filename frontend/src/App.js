@@ -8,23 +8,23 @@ import {
 import HomePage from './pages/HomePage';
 import AvailabilityPage from './pages/AvailabilityPage';
 import BookingPage from './pages/BookingPage';
-import ReservationPage from './pages/ReservationPage';
 import FloatPage from './pages/FloatPage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 import StayInfoPage from './pages/StayInfoPage';
-import AboutPage from './pages/AboutPage';
-import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
+import Modal from 'react-modal';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
-import './App.css';
 import CheckoutListPage from './pages/CheckoutListPage';
 import UserManagementPage from './pages/UserManagementPage';
 import UserProfilePage from './pages/UserProfile';
+import ReservationManagementPage from './pages/ReservationManagementPage';
 
+// Set the app element to your root element
+Modal.setAppElement('#root');
 
 function AppContent() {
   const { isLoading } = useAuth(); // Use the isLoading state from the context
@@ -38,16 +38,14 @@ function AppContent() {
       <Routes>
           {/* Public routes that don't require authentication */}
           <Route path="/" element={<HomePage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/login" element={<Login/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/booking" element={<BookingPage />} />
           {/* <Route path="/date-provisioning" element={<AvailabilityPage />} /> */}
-          <Route path="/reservations" element={<ReservationPage />} />
           <Route path="/saco-river" element={<FloatPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/test" element={<TestPage />} />
           <Route path="/checkout" element={<CheckoutListPage />} />
           {/* <Route path="/stayinfo" element={<StayInfoPage />} /> */}
 
@@ -55,6 +53,7 @@ function AppContent() {
           <Route path="/stayinfo" element={<GuestRoute><StayInfoPage /></GuestRoute>} />
           <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />
           <Route path="/user-management" element={<AdminRoute><UserManagementPage /></AdminRoute>} />
+          <Route path="/reservation-management" element={<AdminRoute><ReservationManagementPage /></AdminRoute>} />
           <Route path="/profile" element={<UserProfilePage />} />
       </Routes>
   );

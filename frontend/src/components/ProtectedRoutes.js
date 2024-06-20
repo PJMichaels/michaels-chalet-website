@@ -28,13 +28,9 @@ export const AdminRoute = ({ children }) => (
 );
 
 export const GuestRoute = ({ children }) => (
-    <ProtectedRoute children={children} allowedGroups={['Guest']} />
+    <ProtectedRoute children={children} allowedGroups={['Admin','Guest']} />
 );
 
 export const LimitedGuestRoute = ({ children }) => (
-    <ProtectedRoute children={children} allowedGroups={['LimitedGuest']} />
-);
-
-export const CombinedAdminGuestRoute = ({ children }) => (
-    <ProtectedRoute children={children} allowedGroups={['Admin', 'Guest']} />
+    <ProtectedRoute children={children} allowedGroups={['Admin','LimitedGuest']} />
 );
