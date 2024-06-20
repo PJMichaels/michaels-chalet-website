@@ -8,21 +8,16 @@ import {
 import HomePage from './pages/HomePage';
 import AvailabilityPage from './pages/AvailabilityPage';
 import BookingPage from './pages/BookingPage';
-import ReservationPage from './pages/ReservationPage';
 import FloatPage from './pages/FloatPage';
 import GalleryPage from './pages/GalleryPage';
 import ContactPage from './pages/ContactPage';
 import StayInfoPage from './pages/StayInfoPage';
-import AboutPage from './pages/AboutPage';
-import TestPage from './pages/TestPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Navbar from './components/Navbar';
 import Modal from 'react-modal';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
-import './App.css';
-// import './index.css';
 import CheckoutListPage from './pages/CheckoutListPage';
 import UserManagementPage from './pages/UserManagementPage';
 import UserProfilePage from './pages/UserProfile';
@@ -48,12 +43,9 @@ function AppContent() {
           <Route path="/logout" element={<Logout/>} />
           <Route path="/booking" element={<BookingPage />} />
           {/* <Route path="/date-provisioning" element={<AvailabilityPage />} /> */}
-          <Route path="/reservations" element={<ReservationPage />} />
           <Route path="/saco-river" element={<FloatPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/test" element={<TestPage />} />
           <Route path="/checkout" element={<CheckoutListPage />} />
           {/* <Route path="/stayinfo" element={<StayInfoPage />} /> */}
 
