@@ -58,14 +58,15 @@ class PasswordChangeView(generics.UpdateAPIView):
 
 # view for admin to add/update/delete all bookings
 class BookingsView(viewsets.ModelViewSet):
-    # permission_classes = (IsAuthenticated, (IsAdminUser or IsGuestUser))
     permission_classes = [IsAuthenticated, IsAdminUser | IsGuestUser]
     
-    queryset = Bookings.objects.all()
+    # queryset = Bookings.objects.all()
+    queryset = Bookings.objects.select_related('created_by').all()
 
     def get_serializer_class(self):
         if self.request.user.groups.filter(name='Admin').exists():
             return AdminBookingsSerializer
+        
         return BookingsSerializer
     
     def get_queryset(self):

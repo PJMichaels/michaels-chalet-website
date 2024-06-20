@@ -62,7 +62,7 @@ class Availability(models.Model):
 class Bookings(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # created_by = models.CharField("Created By", max_length=120)
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     creation_date = models.DateTimeField("Creation Date", auto_now_add=True)
     last_modified = models.DateTimeField("Last Modified", auto_now=True)
     group_size = models.IntegerField("Group Size")
