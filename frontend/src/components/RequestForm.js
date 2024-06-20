@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 // import './BookingForm.css'
 
 
-const RequestForm = ({arrival_date, departure_date}) => {
+const RequestForm = ({arrival_date, departure_date, refreshData}) => {
     const {isLoading, userID, userName } = useAuth();
     const [formData, setFormData] = useState({
         arrivalDate: arrival_date.toDateString(),
@@ -62,7 +62,7 @@ const navigate = useNavigate();
         })
             .then((response) => {
                 console.log(response.data);
-                redirectToPage();
+                refreshData();
             })
             .catch((error) => {
                 // This error should really be in a modal long term
@@ -74,15 +74,27 @@ const navigate = useNavigate();
     if (isLoading) return <div>Loading...</div>;
 
     return (
-        <div className="content-container">
+        <div>
          <form onSubmit={handleSubmit}>
-                 <label>Guest Name: {userName}</label>
-                 {/* <input type="text" name="createdBy" onChange={handleChange} required /> */}
-                 <label>Number of Guests: {formData.groupSize}</label>
-                 <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
-                 <label>Request Message:</label>
-                 <textarea name="requestMessage" onChange={handleChange} required></textarea>
-             <button className="button" type="submit">Request Stay</button>
+                <label>Guest Name: {userName}</label>
+                {/* <input type="text" name="createdBy" onChange={handleChange} required /> */}
+                <div>
+                    <label>Number of Guests: {formData.groupSize}</label><br></br>
+                    <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
+                </div>
+                <label>Request Message:</label><br></br>
+                <textarea 
+                    name="requestMessage" 
+                    onChange={handleChange} 
+                    className='text-black w-full m-2 p-2'
+                    required>
+                </textarea>
+                <button 
+                    type='submit'
+                    className= 'bg-blue-500 text-white w-full py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+                >
+                    Request Stay
+                </button>
          </form>
      </div>
     );
