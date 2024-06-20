@@ -1,123 +1,78 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import Modal from 'react-modal';
+import UsersTable from '../components/UsersTable';
+import { fetchUserData } from '../utilities/api_funcs';
+import CreateUserForm from '../components/CreateUserForm';
 
 const UserManagementPage = () => {
-    const [users, setUsers] = useState([]);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [formData, setFormData] = useState({
-        email: '',
-        username: '',
-        password: '',
-        groups: ''
-    });
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
+  // Add a create user button and form!!
+  // Add phone number and admin_note to user model!
+  // Use random hashes for all ids instead of a counter
 
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get('api/users/');
-            console.log(response.data)
-            setUsers(response.data);
-        } catch (error) {
-            console.error('Error fetching users', error);
-        }
-    };
+  const [userData, setUserData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const handleFormChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
 
-    const createUser = async () => {
-        try {
-            console.log(formData)
-            
-            await axios.post('api/users/', {
-                username: formData.username,
-                email: formData.email,
-                groups: [formData.groups],
-                password: formData.password,
-                confirm_password: formData.confirm_password
-            });
-            console.log("Created new user" + formData.username)
-            fetchUsers();
-        } catch (error) {
-            console.error('Error creating user', error);
-        }
-    };
+   // Function to fetch data from both APIs
+   const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [userData] = await Promise.all([fetchUserData()]);
+      setUserData(userData);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const updateUser = async () => {
-        // Need to change the PW update, such that this is not always required,
-        // aka PATCH vs PUT, and probably so that it is a separate process w modal
-        try {
-            if (formData.password === formData.confirm_password) {
-                await axios.put(`api/users/${selectedUser}/`, {
-                    username: formData.username,
-                    email: formData.email,
-                    groups: [formData.groups],
-                    password: formData.password
-                });
-                console.log('Updated user' + formData.username)
-                fetchUsers();
-            }
-            else {
-                console.log("Password and Confirm Password values do not match.")
-            };
-            
-        } catch (error) {
-            console.error('Error updating user', error);
-        }
-    };
+  // Fetch data when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    const deleteUser = async (userId) => {
-        try {
-            await axios.delete(`api/users/${userId}/`);
-            fetchUsers();
-        } catch (error) {
-            console.error('Error deleting user', error);
-        }
-    };
+  const handleCreateUser = () => {
+    setModalIsOpen(true);
+  };
 
-    const handleEditUser = async (userID) => {
-        const user = users.find(user => user.id === userID);
-        formData.email = user.email;
-        formData.username = user.username;
-        // also set role value!
-        setSelectedUser(user.id);
-    };
+  const closeModal = () => {
+    setModalIsOpen(false);
+    // setSelectedRow(null); // comment out to get rid of null error
+    fetchData();
+  };
+  
+  // If loading, show a loading message
+  if (loading) return <div>Loading...</div>;
 
-    return (
-        <div className="content-container">
-            <h1>Admin User Management</h1>
-            <div>
-                <label>Email</label><input name="email" placeholder="Email" value={formData.email} onChange={handleFormChange} />
-                <label>Username</label><input name="username" placeholder="Username" value={formData.username} onChange={handleFormChange} />
-                <label>Password</label><input name="password" type='password' placeholder="Password" value={formData.password} onChange={handleFormChange} />
-                <label>Confirm Password</label><input name="confirm_password" type='password' placeholder="Confirm Password" value={formData.confirm_password} onChange={handleFormChange} />
-                <select name="groups" value={formData.groups} onChange={handleFormChange}>
-                    <option value="">Select Role</option>
-                    <option value={"Admin"}>Admin</option>
-                    <option value={"Guest"}>Guest</option>
-                    <option value={"LimitedGuest"}>LimitedGuest</option>
-                </select>
-                <button onClick={createUser}>Create User</button>
-                <button onClick={updateUser}>Update User</button>
-            </div>
-            <div>
-                <h2>User List</h2>
-                <ul>
-                    {users.map(user => (
-                        <li key={user.id}>
-                            {user.username} - {user.groups}
-                            <button onClick={() => handleEditUser(user.id)}>Edit</button>
-                            <button onClick={() => deleteUser(user.id)}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
-    );
+  // If there's an error, show an error message
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    
+    <div className='bg-black bg-opacity-80 p-4 m-8 rounded-sm shadow-lg'>
+      <h1 className='text-white text-2xl border-b-2'>User Management</h1>
+      <button 
+        onClick={() => handleCreateUser()}
+        className='float-right bg-blue-500 text-white py-1 px-4 m-2 rounded-lg hover:bg-blue-600 transition duration-300'
+      >
+        Add New User
+      </button>
+      <UsersTable data={userData} refreshData={fetchData} />
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        contentLabel="Create User"
+        className='bg-none'
+      >
+        <CreateUserForm closeModal = {closeModal}  />
+        {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
+      </Modal>
+    </div>
+  );
 };
 
 export default UserManagementPage;

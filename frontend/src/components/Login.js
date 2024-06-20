@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
-import { useAuth } from '../context/AuthContext'; // Import useAuth from your AuthContext
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {     
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');     
     const navigate = useNavigate();
     const location = useLocation();
@@ -18,51 +17,53 @@ const Login = () => {
         e.preventDefault();          
 
         try {
-            // Use the login function from your AuthContext
-            await auth.login(username, password);
-
+            // Use the login function from AuthContext
+            await auth.login(email, password);
             // Navigate to the previous page or to the home page if no previous page is found
             navigate(from, { replace: true });
-            
         } catch (error) {
             console.error('Login error', error);
-            // Potentially update the state to show an error message to the user
+            // Should have a displayed error if incorrect login
         }    
     };    
         
-    return (      
-        <div className="Auth-form-container">
-            <form className="Auth-form" onSubmit={submit}>
-                <div className="Auth-form-content">
-                    <h3 className="Auth-form-title">Sign In</h3>
-                    <div className="form-group mt-3">
-                        <label>Username</label>
-                        <input 
-                            className="form-control mt-1" 
-                            placeholder="Enter Username" 
-                            name="username"  
-                            type="text" 
-                            value={username}
-                            required 
-                            onChange={e => setUsername(e.target.value)}
-                        />
-                    </div>
-                    <div className="form-group mt-3">
-                        <label>Password</label>
-                        <input 
-                            name="password" 
-                            type="password"     
-                            className="form-control mt-1"
-                            placeholder="Enter password"
-                            value={password}
-                            required
-                            onChange={e => setPassword(e.target.value)}
-                        />
-                    </div>
-                    <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </div>
+    return ( 
+        <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-md mx-auto my-10">
+            <form onSubmit={submit} className="space-y-6">
+                <h3 className='text-white text-2xl font-semibold'>Sign In</h3>
+                
+                <div>
+                    <label className='text-white mb-2'>Email</label>
+                    <input 
+                        className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                        placeholder="Enter Email" 
+                        name="email"  
+                        type="text" 
+                        value={email}
+                        required 
+                        onChange={e => setEmail(e.target.value)}
+                    />
                 </div>
+                
+                <div>
+                    <label className='text-white mb-2'>Password</label>
+                    <input 
+                        className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        name="password" 
+                        type="password"     
+                        placeholder="Enter password"
+                        value={password}
+                        required
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                </div>
+                
+                <button 
+                    type="submit" 
+                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+                >
+                    Submit
+                </button>
             </form>
         </div>
     );

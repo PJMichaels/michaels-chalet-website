@@ -1,107 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import 'react-calendar/dist/Calendar.css';
-import BookingForm from "../components/BookingForm";
+import RequestForm from "../components/RequestForm";
 import BookingCalendar from "../components/BookingCalendar";
-import './BookingPage.css';
+import ReservationList from "../components/ReservationList";
+import {getAvailableDates} from "../utilities/calendarFuncs";
+import { fetchBookingsData, fetchProvisionedData } from '../utilities/api_funcs';
+import './Calendar.css';
 
 const BookingPage = () => {
-  // variables for available dates to be stored or error states
+    // variables for available dates to be stored or error states
     // from available data, then assign values to those variables
-    const [provisionedAPI, setProvisionedAPI] = useState([]);
-    const [provisionedAPIError, setProvisionedAPIError] = useState(null);
-
-    // Queries available api and populate variables
-    useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/available/')
-            .then((response) => {
-                setProvisionedAPI(response.data);
-            })
-            .catch((err) => {
-                setProvisionedAPIError(err.toString());
-            });
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
-
-    // const allowedRanges = allowedData.map((entry, index) => 
-    // ({'start': new Date(entry.start_date), 'end': new Date(entry.end_date)})
-    // );
-
-
-    // variables for booking data to be stored or error states
-    // from booking data, then assign values to those variables
-    const [bookedAPI, setBookedAPI] = useState([]);
-    const [bookedAPIError, setBookedAPIError] = useState(null);
-
-    // this code actually populates variables
-    useEffect(() => {
-        // Assume your API endpoint is 'http://yourapi.com/bookings'
-        axios.get('/api/bookings/')
-            .then((response) => {
-                setBookedAPI(response.data);
-            })
-            .catch((err) => {
-                setBookedAPIError(err.toString());
-            });
-    }, []); // Empty dependency array means this useEffect runs once when component mounts
-
-    // starts the calendar creation process
-    const getAvailableDates = (provisionedRanges, bookedRanges) => {
-        /*
-        Function takes in two arrays of objects, where each object must
-        contain a "start_date" and "end_date" key and date string value.
-        */
-        const expandDateRanges = (dates) => {
-            let result = [];
-
-            // testing if this prevents loading error
-            if (!dates) {
-                return result;
-            }
-        
-            dates.forEach(range => {
-                let current = new Date(range.start_date);
-                let end = new Date(range.end_date);
-        
-                while (current <= end) {
-                    result.push(current.toDateString());
-                    // push date change to account zero index of day in calendar
-                    current.setDate(current.getDate() + 1);
-                }
-            });
-            return result;
-        };
-    
-        const filterDatesAfterToday = (dates) => {
-            const daysFromToday = 2;
-            // const today = new Date();
-            // today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for comparison
-            const earliestBookingDate = new Date();
-            earliestBookingDate.setDate(earliestBookingDate.getDate() + daysFromToday); // Set to 2 days from now
-            earliestBookingDate.setHours(0, 0, 0, 0); // Normalize to midnight for comparison
-
-    
-            return dates.filter(date => {
-                const compareDate = new Date(date);
-                return compareDate > earliestBookingDate;
-            });
-        };
-    
-        const bookedDates = expandDateRanges(bookedRanges);
-        const provisionedDates = filterDatesAfterToday(expandDateRanges(provisionedRanges));
-        const availableDates = [];
-    
-        provisionedDates.forEach((date) => {
-            if (!bookedDates.includes(date)) {
-                availableDates.push(date);
-            }
-        })
-        return availableDates;
-    }
-
-    const availableDates = getAvailableDates(provisionedAPI, bookedAPI);
-
+    const [bookingData, setBookingData] = useState([]);
+    const [provisionedData, setProvisionedData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedDates, setDates] = React.useState([new Date(), new Date()]);
+    const minDaysOut = 2; // temporary variable sets minimum days out for booking
+
+    // Function to fetch data from both APIs
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const [bookingData, provisionedData] = await Promise.all([fetchBookingsData(), fetchProvisionedData()]);
+            setBookingData(bookingData);
+            setProvisionedData(provisionedData);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch data when the component mounts
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    // If loading, show a loading message
+    if (loading) return <div>Loading...</div>;
+
+    // If there's an error, show an error message
+    if (error) return <div>Error: {error}</div>;
+
+    // Get available dates from provisioned and booked dates
+    const availableDates = getAvailableDates(provisionedData, bookingData, minDaysOut);
 
 
     const handleDateChange = newDates => {
@@ -109,16 +52,29 @@ const BookingPage = () => {
     };
 
   return (
-    <div className="booking-container">
-        <BookingForm
-             start_date={selectedDates[0]}
-             end_date= {selectedDates[1]}
-         />
-         <BookingCalendar 
-             availableDates={availableDates}
-             selectedDates={selectedDates}
-             handleDateChange = {handleDateChange}
-             />
+    // <div className="booking-container">
+    <div className='bg-backdrop-bg text-white p-5'>
+        <div className='flex'>
+            <div className='flex-5 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-8'>
+                <ReservationList/>
+            </div>
+            
+            <div className='flex-3 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-8'>
+                <BookingCalendar 
+                    className='object-center'
+                    availableDates={availableDates}
+                    selectedDates={selectedDates}
+                    handleDateChange = {handleDateChange}
+                />
+                <div className='border-t-2 m-2 p-2'>
+                <RequestForm
+                    arrival_date={selectedDates[0]}
+                    departure_date= {selectedDates[1]}
+                    refreshData = {fetchData}
+                />
+                </div>
+            </div>
+        </div>
    </div>
   );
 };

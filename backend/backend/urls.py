@@ -23,16 +23,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 router = routers.DefaultRouter()
-router.register(r'available', chaletsyncviews.AvailabilityView, 'availability')
+router.register(r'availability', chaletsyncviews.AvailabilityView, 'availability')
 router.register(r'bookings', chaletsyncviews.BookingsView, 'bookings')
+router.register(r'mybookings', chaletsyncviews.MyBookingsView, 'mybookings')
+router.register(r'requests', chaletsyncviews.RequestsView, 'requests')
+router.register(r'myrequests', chaletsyncviews.MyRequestsView, 'myrequests')
 router.register(r'users', chaletsyncviews.UserViewSet, 'users')
-# router.register(r'user', chaletsyncviews.UserView.as_view(), 'user')
-# router.register(r'users', chaletsyncviews.UserList, 'users')
-# router.register(r'users-details', chaletsyncviews.UserDetail, 'user-details')
-
-
-#     path('users/<int:pk>/', views.UserDetail.as_view()),
-# router.register(r'groups', chaletsyncviews.GroupViewSet, 'groups')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,11 +36,12 @@ urlpatterns = [
     path('api/token/', 
           TokenObtainPairView.as_view(), 
           name ='token_obtain_pair'),
-    path('api/user/', chaletsyncviews.UserView.as_view(), name='user-detail'),
     path('api/token/refresh/', 
           TokenRefreshView.as_view(), 
           name ='token_refresh'),
     path('', include('authentication.urls')),
     path('api/token/validate/', authenticationviews.ValidateTokenView.as_view(), name='token_validate'),     
     path('api/logout/', authenticationviews.LogoutView.as_view(), name ='logout'),
+    path('api/profile/', chaletsyncviews.UserProfileView.as_view(), name='user-profile'),
+    path('api/profile/change-password/', chaletsyncviews.PasswordChangeView.as_view(), name='change-password'),
 ]

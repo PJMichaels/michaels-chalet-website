@@ -1,21 +1,32 @@
+// src/pages/CarouselPage.js
 import React from 'react';
-// import ImageGallery from 'react-image-gallery';
-// import { images } from '../data/gallery-images';
-import './GalleryPage.css';
+import ImageCarousel from '../components/ImageCarousel';
+
+
+const imagePaths = [
+  '../../Photos/gallery/KitchenTable1.jpg',
+  '../../Photos/gallery/LivingRoom1-xmas.jpg',
+  '../../Photos/gallery/MainFloor1-xmas.jpg',
+  '../../Photos/gallery/MainFloor2-xmas.jpg',
+  '../../Photos/gallery/Kitchen1.jpg',
+  '../../Photos/gallery/MainFloorBath1.jpg',
+  '../../Photos/gallery/SecondBedroom1.jpg',
+  '../../Photos/gallery/SecondBedroom2.jpg',
+  '../../Photos/gallery/FamilyRoom1.jpg',
+  '../../Photos/gallery/FamilyRoom2.jpg',
+  '../../Photos/gallery/DownStairsBath1.jpg',
+  '../../Photos/gallery/Office1.jpg',
+  '../../Photos/gallery/Office2.jpg',
+  '../../Photos/gallery/Office3.jpg'
+];
 
 const GalleryPage = () => {
   return (
-    <div></div>
-    // <div className='content-container'>
-    //   <h1>Welcome to the Photo Gallery!</h1>
-    //   <p>
-    //     Place holder for where we can add our favorite
-    //     photos of the house and surrounding area etc..
-    //   </p>
-    //   <div className="image-gallery-wrapper">
-    //     <ImageGallery items={images} />      
-    //     </div>
-    // </div>
+    <div className='bg-black bg-opacity-80 p-4 m-8 h-[calc(100vh-6rem)] rounded-lg shadow-lg object-contain'>
+       {/* <div className="container mx-auto p-4"> */}
+        <ImageCarousel imagePaths={imagePaths} />
+      {/* </div> */}
+    </div>
   );
 };
 
