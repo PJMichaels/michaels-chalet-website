@@ -53,19 +53,23 @@ const UserManagementPage = () => {
 
   return (
     
-    <div className="App">
-      <h1>User Management</h1>
-      <button onClick={() => handleCreateUser()}>Add User</button>
+    <div className='bg-black bg-opacity-80 p-4 m-8 rounded-sm shadow-lg'>
+      <h1 className='text-white text-2xl border-b-2'>User Management</h1>
+      <button 
+        onClick={() => handleCreateUser()}
+        className='float-right bg-blue-500 text-white py-1 px-4 m-2 rounded-lg hover:bg-blue-600 transition duration-300'
+      >
+        Add New User
+      </button>
       <UsersTable data={userData} refreshData={fetchData} />
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Create User"
+        className='bg-none'
       >
-        <h2>Create User</h2>
         <CreateUserForm closeModal = {closeModal}  />
         {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
-        <button onClick={closeModal}>Close</button>
       </Modal>
     </div>
   );

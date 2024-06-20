@@ -102,92 +102,148 @@ const handlePasswordSubmit = (e) => {
   };
 
   // If loading, show a loading message
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-center text-white">Loading...</div>;
 
   // If there's an error, show an error message
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div className="text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div>
-      <h1>My Profile Details:</h1>
-      <div>
-        <label>Name: {userData.name}</label><br/>
-        <label>Email: {userData.email}</label><br/>
-        <label>Phone Number: {userData.phone}</label><br/>
-        <button onClick={() => setProfileModalOpen(true)}>Update Details</button>
-        <button onClick={() => setPasswordModalOpen(true)}>Change Password</button>
+    <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-2xl mx-auto my-10">
+      <h1 className="text-white text-2xl font-semibold mb-6 border-b-2 py-2">Profile Details:</h1>
+      <div className="space-y-4">
+        <div className="text-white text-lg">
+          <span className="font-medium">Name:</span> {userData.name}
+        </div>
+        <div className="text-white text-lg">
+          <span className="font-medium">Email:</span> {userData.email}
+        </div>
+        <div className="text-white text-lg">
+          <span className="font-medium">Phone Number:</span> {userData.phone}
+        </div>
+        <div className="space-x-4 mt-4">
+          <button 
+            onClick={() => setProfileModalOpen(true)} 
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+          >
+            Update Details
+          </button>
+          <button 
+            onClick={() => setPasswordModalOpen(true)} 
+            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition duration-300"
+          >
+            Change Password
+          </button>
+        </div>
       </div>
 
       <Modal
         isOpen={isProfileModalOpen}
         onRequestClose={closeModal}
         contentLabel="Update Profile"
+        className="bg-none"
       >
-        <h2>Update Profile</h2>
-        <form onSubmit={handleProfileSubmit}>
-        <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={profileData.email}
-            onChange={handleProfileChange}
-          />
-          <br />
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={profileData.name}
-            onChange={handleProfileChange}
-          />
-          <br />
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="phone"
-            value={profileData.phone}
-            onChange={handleProfileChange}
-          />
-          <br />
-          <button type="submit">Update</button>
-        </form>
-        <button onClick={closeModal}>Close</button>
+        <div className="max-w-xl mx-auto mt-11 p-4 bg-white shadow-md rounded-md">
+          <h2 className="text-2xl font-semibold mb-6">Update Profile Details</h2>
+          <form onSubmit={handleProfileSubmit} className="space-y-4">
+              <div>
+                  <label className="block text-lg font-medium mb-2">Email:</label>
+                  <input
+                      type="email"
+                      name="email"
+                      value={profileData.email}
+                      onChange={handleProfileChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <div>
+                  <label className="block text-lg font-medium mb-2">Name:</label>
+                  <input
+                      type="text"
+                      name="name"
+                      value={profileData.name}
+                      onChange={handleProfileChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <div>
+                  <label className="block text-lg font-medium mb-2">Phone:</label>
+                  <input
+                      type="text"
+                      name="phone"
+                      value={profileData.phone}
+                      onChange={handleProfileChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <button 
+                  type="submit" 
+                  className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+              >
+                  Update
+              </button>
+          </form>
+          <button 
+              onClick={closeModal} 
+              className="mt-4 w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300"
+          >
+              Cancel
+          </button>
+        </div>
       </Modal>
 
       <Modal
         isOpen={isPasswordModalOpen}
         onRequestClose={closeModal}
         contentLabel="Change Password"
+        className="bg-none"
       >
-        <h2>Change Password</h2>
-        <form onSubmit={handlePasswordSubmit}>
-          <label>Old Password:</label>
-          <input
-            type="password"
-            name="oldPassword"
-            value={passwordData.oldPassword}
-            onChange={handlePasswordChange}
-          />
-          <br />
-          <label>New Password:</label>
-          <input
-            type="password"
-            name="newPassword"
-            value={passwordData.newPassword}
-            onChange={handlePasswordChange}
-          />
-          <br />
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            name="confirmedPassword"
-            value={passwordData.confirmedPassword}
-            onChange={handlePasswordChange}
-          />
-          <br />
-          <button type="submit">Change Password</button>
-        </form>
-        <button onClick={closeModal}>Close</button>
+        <div className="max-w-xl mx-auto mt-11 p-4 bg-white shadow-md rounded-md">
+          <h2 className="text-2xl font-semibold mb-6">Change Password</h2>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <div>
+                  <label className="block text-lg font-medium mb-2">Old Password:</label>
+                  <input
+                      type="password"
+                      name="oldPassword"
+                      value={passwordData.oldPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <div>
+                  <label className="block text-lg font-medium mb-2">New Password:</label>
+                  <input
+                      type="password"
+                      name="newPassword"
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <div>
+                  <label className="block text-lg font-medium mb-2">Confirm Password:</label>
+                  <input
+                      type="password"
+                      name="confirmedPassword"
+                      value={passwordData.confirmedPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+              </div>
+              <button 
+                  type="submit" 
+                  className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+              >
+                  Change Password
+              </button>
+          </form>
+          <button 
+              onClick={closeModal} 
+              className="mt-4 w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300"
+          >
+              Cancel
+          </button>
+        </div>
       </Modal>
     </div>
   );

@@ -56,9 +56,24 @@ const RequestTable = ({data, refreshData }) => {
       Header: 'Actions',
       Cell: ({ row }) => (
         <div>
-          <button onClick={() => handleApprove(row.original)}>Approve</button>
-          <button onClick={() => handleEdit(row.original)}>Edit</button>
-          <button onClick={() => handleDelete(row.original.id)}>Delete</button>
+          <button 
+            onClick={() => handleApprove(row.original)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+          >
+            Approve
+          </button>
+          <button 
+            onClick={() => handleEdit(row.original)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+          >
+            Edit
+          </button>
+          <button 
+            onClick={() => handleDelete(row.original.id)}
+            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-red-600 transition duration-300'
+          >
+            Delete
+          </button>
         </div>
       ),
     },
@@ -191,11 +206,13 @@ const RequestTable = ({data, refreshData }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         contentLabel="Edit Request"
+        className='bg-none'
       >
-        <h2>Edit Request</h2>
-        <EditRequestForm requestObject= {selectedRow} closeModal = {closeModal}  />
+        <EditRequestForm 
+          requestObject= {selectedRow} 
+          closeModal = {closeModal}  
+        />
         {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
-        <button onClick={closeModal}>Close</button>
       </Modal>
     </div>
   );
