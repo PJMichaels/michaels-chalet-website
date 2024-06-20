@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import AvailabilityForm from "../components/AvailabilityForm";
 import AdminCalendar from "../components/AdminCalendar";
-import ProvisioningManagement from '../components/ProvisioningManagement';
+import ProvisionedList from '../components/ProvisionedList';
 import {dateRangeToArray} from "../utilities/calendarFuncs";
 import { fetchBookingsData, fetchProvisionedData } from '../utilities/api_funcs';
-import './AvailabilityPage.css';
+import './Calendar.css';
 
 const AvailabilityPage = () => {
     // variables for available dates to be stored or error states
@@ -62,25 +62,32 @@ const AvailabilityPage = () => {
     };
 
   return (
-    <div>
-        <div className="booking-container">
-            <AvailabilityForm 
-                start_date={selectedDates[0]}
-                end_date= {selectedDates[1]}
-            />
-            <AdminCalendar 
-                // evaluate availableDates vs provisionedDates here
-                availableDates={provisionedDates}
-                bookedDates={bookedDates}
-                selectedDates={selectedDates}
-                handleDateChange = {handleDateChange}
-            />
-        </div>
-        <div>
-            <ProvisioningManagement
-                provisionedData={provisionedData}
-                refreshData={fetchData}
-            />
+    <div className='bg-backdrop-bg text-white p-5'>
+        <div className='flex'>
+            {/* <div className="booking-container"> */}
+            <div className='flex-5 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-8'>
+                <ProvisionedList
+                    provisionedData={provisionedData}
+                    refreshData={fetchData}
+                />
+            </div>
+            <div className='flex-3 bg-black bg-opacity-80 shadow-lg rounded-sm mx-1 my-2 p-8'>
+                <div className='p-2 content-center'>
+                    <AdminCalendar 
+                        // evaluate availableDates vs provisionedDates here
+                        availableDates={provisionedDates}
+                        bookedDates={bookedDates}
+                        selectedDates={selectedDates}
+                        handleDateChange = {handleDateChange}
+                    />
+                </div>
+                <div className='border-t-2 p-2'>
+                    <AvailabilityForm 
+                        start_date={selectedDates[0]}
+                        end_date= {selectedDates[1]}
+                    />
+                </div>
+            </div>
         </div>
     </div>
   );

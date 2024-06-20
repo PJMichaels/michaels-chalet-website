@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import RequestForm from "../components/RequestForm";
 import BookingCalendar from "../components/BookingCalendar";
+import ReservationList from "../components/ReservationList";
 import {getAvailableDates} from "../utilities/calendarFuncs";
 import { fetchBookingsData, fetchProvisionedData } from '../utilities/api_funcs';
-import './BookingPage.css';
+import './Calendar.css';
 
 const BookingPage = () => {
     // variables for available dates to be stored or error states
@@ -51,16 +52,29 @@ const BookingPage = () => {
     };
 
   return (
-    <div className="booking-container">
-        <RequestForm
-             arrival_date={selectedDates[0]}
-             departure_date= {selectedDates[1]}
-         />
-         <BookingCalendar 
-             availableDates={availableDates}
-             selectedDates={selectedDates}
-             handleDateChange = {handleDateChange}
-             />
+    // <div className="booking-container">
+    <div className='bg-backdrop-bg text-white p-5'>
+        <div className='flex'>
+            <div className='flex-5 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-8'>
+                <ReservationList/>
+            </div>
+            
+            <div className='flex-3 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-8'>
+                <BookingCalendar 
+                    className='object-center'
+                    availableDates={availableDates}
+                    selectedDates={selectedDates}
+                    handleDateChange = {handleDateChange}
+                />
+                <div className='border-t-2 m-2 p-2'>
+                <RequestForm
+                    arrival_date={selectedDates[0]}
+                    departure_date= {selectedDates[1]}
+                    refreshData = {fetchData}
+                />
+                </div>
+            </div>
+        </div>
    </div>
   );
 };
