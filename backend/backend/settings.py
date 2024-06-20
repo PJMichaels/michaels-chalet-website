@@ -35,6 +35,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# probably need to double check this... * seems like a bad idea
 ALLOWED_HOSTS = ['backend', 'localhost', '127.0.0.1', "*"]
 
 # Application definition
