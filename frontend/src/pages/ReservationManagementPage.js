@@ -39,11 +39,13 @@ const ReservationManagementPage = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    
-    <div className="App">
-      <h1>New Requests</h1>
+    <div className='bg-black bg-opacity-80 p-4 m-8 rounded-sm shadow-lg'>
+      <h1 className='text-white text-2xl border-b-2 m-2'>Reservation Management</h1>
+      <br></br>
+      <h2 className='text-white text-xl m-2'>New Requests</h2>
       <RequestTable data={requestData} refreshData={fetchData} />
-      <h1>Reservation Management</h1>
+      <div className='border-b-4 my-8'><br></br></div>
+      <h2 className='text-white text-xl m-2'>Confirmed Bookings</h2>
       <BookingTable data={bookingData} refreshData={fetchData} />
     </div>
   );
