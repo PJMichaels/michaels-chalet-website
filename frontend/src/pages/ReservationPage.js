@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 import { fetchMyBookingsData, fetchMyRequestsData, postBookingChangeRequest } from '../utilities/api_funcs';
 import EditMyBookingForm from '../components/EditMyBookingForm';
 import EditMyRequestForm from '../components/EditMyRequestForm';
-import './ReservationPage.css'
 
 const ReservationPage = () => {
 
