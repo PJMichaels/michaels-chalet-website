@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 // Base URL for your API
-const BASE_URL = '/api/';
+const BASE_URL = '/api';
 
 
 // Function to fetch data from booking endpoint

@@ -5,3 +5,4 @@ cmd-cheetsheet.txt
 credentials.json
 backend/.env
 app-context.txt
+backend/chaletsync/migrations/*
