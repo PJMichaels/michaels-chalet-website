@@ -5,9 +5,10 @@ import ImageCarousel from '../components/ImageCarousel';
 
 const imagePaths = [
   '../../Photos/gallery/KitchenTable1.jpg',
-  '../../Photos/gallery/LivingRoom1-xmas.jpg',
-  '../../Photos/gallery/MainFloor1-xmas.jpg',
-  '../../Photos/gallery/MainFloor2-xmas.jpg',
+  '../../Photos/gallery/LivingRoom1.jpg',
+  // '../../Photos/gallery/LivingRoom1-xmas.jpg',
+  // '../../Photos/gallery/MainFloor1-xmas.jpg',
+  // '../../Photos/gallery/MainFloor2-xmas.jpg',
   '../../Photos/gallery/Kitchen1.jpg',
   '../../Photos/gallery/MainFloorBath1.jpg',
   '../../Photos/gallery/SecondBedroom1.jpg',
