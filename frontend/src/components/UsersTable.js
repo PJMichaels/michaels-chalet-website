@@ -1,3 +1,4 @@
+// src/components/UsersTable.js
 import React, { useState, useMemo } from 'react';
 import { useTable, useSortBy, useFilters } from 'react-table';
 import Modal from 'react-modal';
@@ -5,11 +6,10 @@ import axios from 'axios';
 import EditUserForm from './EditUserForm';
 import './DataTable.css';
 
-const UsersTable = ({data, refreshData}) => {
+const UsersTable = ({ data, refreshData }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
-  
   const ColumnFilter = ({ column }) => {
     const { filterValue, setFilter } = column;
     return (
@@ -17,26 +17,27 @@ const UsersTable = ({data, refreshData}) => {
         value={filterValue || ''}
         onChange={e => setFilter(e.target.value || undefined)}
         placeholder={`Search ${column.id}`}
+        className='border rounded p-2'
       />
     );
   };
 
   const columns = useMemo(() => [
-    {
-      Header: 'ID',
-      accessor: 'id',
-      allowFilter: false,
-    },
-    {
-      Header: 'Email',
-      accessor: 'email',
-      allowFilter: false,
-    },
+    // {
+    //   Header: 'ID',
+    //   accessor: 'id',
+    //   allowFilter: false,
+    // },
     {
       Header: 'Name',
       accessor: 'name',
       allowFilter: true,
       Filter: ColumnFilter,
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
+      allowFilter: false,
     },
     {
       Header: 'Phone',
@@ -54,15 +55,15 @@ const UsersTable = ({data, refreshData}) => {
       allowFilter: false,
       Cell: ({ row }) => (
         <div>
-          <button 
+          <button
             onClick={() => handleEdit(row.original)}
-            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+            className='bg-blue-500 text-white w-full py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
           >
             Edit
           </button>
-          <button 
+          <button
             onClick={() => handleDelete(row.original.id)}
-            className='bg-blue-500 text-white py-1 px-4 m-1 rounded-lg hover:bg-red-600 transition duration-300'
+            className='bg-red-500 text-white w-full py-1 px-4 m-1 rounded-lg hover:bg-red-600 transition duration-300'
           >
             Delete
           </button>
@@ -71,26 +72,16 @@ const UsersTable = ({data, refreshData}) => {
     },
   ], []);
 
-
   const handleEdit = (row) => {
-    // const requestObject = data.find(item => item.id === row.id);
     setSelectedRow(row);
     setModalIsOpen(true);
-    // refreshData();
   };
 
-
   const handleDelete = async (id) => {
-    // Implement your delete functionality here
-    console.log('Delete row with ID:', id);
-
     try {
-      // Delete request on booking id
       const deleteResponse = await axios.delete(`api/users/${id}/`);
-
-      if (deleteResponse.status === 204) { // Check if the request was successful
+      if (deleteResponse.status === 204) {
         console.log('delete successful');
-        
       } else {
         console.error('Error deleting user');
       }
@@ -100,10 +91,8 @@ const UsersTable = ({data, refreshData}) => {
     refreshData();
   };
 
-  
   const closeModal = () => {
     setModalIsOpen(false);
-    // setSelectedRow(null); // comment out to get rid of null error
     refreshData();
   };
 
@@ -118,13 +107,13 @@ const UsersTable = ({data, refreshData}) => {
   } = tableInstance;
 
   return (
-    <div>
-      <table {...getTableProps()}>
-        <thead>
+    <div className='overflow-x-auto'>
+      <table {...getTableProps()} className='min-w-full'>
+        <thead className='bg-gray-800 text-white'>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())} className='p-2 text-left'>
                   {column.render('Header')}
                   {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
                   <div>{column.allowFilter ? column.render('Filter') : null}</div>
@@ -133,13 +122,13 @@ const UsersTable = ({data, refreshData}) => {
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className='bg-gray-700 text-white'>
           {rows.map(row => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => (
-                  <td {...cell.getCellProps()}>
+                  <td {...cell.getCellProps()} className='p-2 border-t border-gray-600'>
                     {cell.render('Cell')}
                   </td>
                 ))}
@@ -154,8 +143,7 @@ const UsersTable = ({data, refreshData}) => {
         contentLabel="Edit User"
         className='bg-none'
       >
-        <EditUserForm userObject= {selectedRow} closeModal = {closeModal}  />
-        {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
+        <EditUserForm userObject={selectedRow} closeModal={closeModal} />
       </Modal>
     </div>
   );

@@ -1,153 +1,92 @@
-import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import React from 'react';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { useAuth } from '../context/AuthContext';
 
-function Navbar() {
+function ResponsiveNavbar() {
+  const { isLoggedIn, isLoading, logout, userGroups } = useAuth();
+  const isAdmin = isLoggedIn && userGroups.includes('Admin');
+  const isGuest = isLoggedIn && userGroups.includes('Guest');
+  const isLimitedGuest = isLoggedIn && userGroups.includes('LimitedGuest');
 
-    const { isLoggedIn, isLoading, logout, userGroups } = useAuth();
-    const isAdmin = isLoggedIn && userGroups.includes('Admin');
-    const isGuest = isLoggedIn && userGroups.includes('Guest');
-    const isLimitedGuest = isLoggedIn && userGroups.includes('LimitedGuest');
+  const handleSelect = (eventKey) => {
+    if (eventKey === 'logout') {
+      logout();
+    }
+  };
 
-    const handleSelect = (eventKey) => {
-        if (eventKey === 'logout') {
-            logout();
-        } 
-      };
-
-
-    const AdminRoutes = () => (
-        <Nav variant="pills" onSelect={handleSelect}>
-            <Nav.Item>
-                <Nav.Link eventKey="home" title="Home" href="/">
-                Home
-                </Nav.Link>
-            </Nav.Item>
-            <NavDropdown title="Admin" id="nav-dropdown">
-                <NavDropdown.Item eventKey="date-provisioning" href='/date-provisioning'>Provision Dates</NavDropdown.Item>
-                <NavDropdown.Item eventKey="reservation-management" href='/reservation-management'>Manange Bookings</NavDropdown.Item>
-                <NavDropdown.Item eventKey="user-management" href='/user-management'>Manage Users</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Item>
-                <Nav.Link eventKey="gallery" title="Gallery" href="/gallery">
-                    Photo Gallery
-                </Nav.Link>
-            </Nav.Item>
-            <NavDropdown title="Activities" id="nav-dropdown">
-                <NavDropdown.Item eventKey="saco-river" href='/saco-river'>River Tubing</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Item>
-                <Nav.Link eventKey="booking" title="Book Dates" href="/booking">
-                Book Dates
-                </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="profile" title="Profile" href="/profile">
-                Profile
-                </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="logout">Logout</Nav.Link>
-            </Nav.Item>
-        </Nav>
-      );
-    
-    const GuestRoutes = () => (
-    <Nav variant="pills" onSelect={handleSelect}>
-        <Nav.Item>
-            <Nav.Link eventKey="home" title="Home" href="/">
-                Home
-            </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-            <Nav.Link eventKey="gallery" title="Gallery" href="/gallery">
-                Photo Gallery
-            </Nav.Link>
-        </Nav.Item>
-        <NavDropdown title="Activities" id="nav-dropdown">
-            <NavDropdown.Item eventKey="saco-river" href='/saco-river'>River Tubing</NavDropdown.Item>
-        </NavDropdown>
-        <Nav.Item>
-            <Nav.Link eventKey="booking" title="Book Dates" href="/booking">
-                Book Dates
-            </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-            <Nav.Link eventKey="profile" title="Profile" href="/profile">
-                Profile
-            </Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-            <Nav.Link eventKey="logout">Logout</Nav.Link>
-        </Nav.Item>
+  const AdminRoutes = () => (
+    <Nav className="me-auto text-white" onSelect={handleSelect}>
+      <Nav.Link href="/">Home</Nav.Link>
+      <NavDropdown title="Admin" id="admin-nav-dropdown">
+        <NavDropdown.Item href="/date-provisioning">Provision Dates</NavDropdown.Item>
+        <NavDropdown.Item href="/reservation-management">Manage Bookings</NavDropdown.Item>
+        <NavDropdown.Item href="/user-management">Manage Users</NavDropdown.Item>
+      </NavDropdown>
+      <Nav.Link href="/gallery">Photo Gallery</Nav.Link>
+      <NavDropdown title="Activities" id="activities-nav-dropdown">
+        <NavDropdown.Item href="/saco-river">River Tubing</NavDropdown.Item>
+      </NavDropdown>
+      <Nav.Link href="/booking">Reservations</Nav.Link>
+      <Nav.Link href="/profile">Profile</Nav.Link>
+      <Nav.Link eventKey="logout">Logout</Nav.Link>
     </Nav>
-    );
+  );
 
-      const LimitedGuestRoutes = () => (
-        <Nav variant="pills" onSelect={handleSelect}>
-            <Nav.Item>
-                <Nav.Link eventKey="home" title="Home" href="/">
-                    Home
-                </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="gallery" title="Gallery" href="/gallery">
-                    Photo Gallery
-                </Nav.Link>
-            </Nav.Item>
-            <NavDropdown title="Activities" id="nav-dropdown">
-                <NavDropdown.Item eventKey="saco-river" href='/saco-river'>River Tubing</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Item>
-                <Nav.Link eventKey="reservations" title="Reservations" href="/reservations">
-                    Reservations
-                </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="profile" title="Profile" href="/profile">
-                    Profile
-                </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-                <Nav.Link eventKey="logout">Logout</Nav.Link>
-            </Nav.Item>
-        </Nav>
-      );
+  const GuestRoutes = () => (
+    <Nav className="me-auto text-white" onSelect={handleSelect}>
+      <Nav.Link href="/">Home</Nav.Link>
+      <Nav.Link href="/gallery">Photo Gallery</Nav.Link>
+      <NavDropdown title="Activities" id="activities-nav-dropdown">
+        <NavDropdown.Item href="/saco-river">River Tubing</NavDropdown.Item>
+      </NavDropdown>
+      <Nav.Link href="/booking">Reservations</Nav.Link>
+      <Nav.Link href="/profile">Profile</Nav.Link>
+      <Nav.Link eventKey="logout">Logout</Nav.Link>
+    </Nav>
+  );
 
-      const PublicRoutes = () => (
-        <Nav variant="pills">
-            <Nav.Item>
-                <Nav.Link eventKey="home" title="Home" href="/">
-                    Home
-                </Nav.Link>
-            </Nav.Item>
-            <NavDropdown title="Activities" id="nav-dropdown">
-                <NavDropdown.Item eventKey="saco-river" href='/saco-river'>River Tubing</NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Item>
-                <Nav.Link eventKey="login" title="Login" href="/login">
-                    Login
-                </Nav.Link>
-            </Nav.Item>
-        </Nav>
-      );
+  const LimitedGuestRoutes = () => (
+    <Nav className="me-auto" onSelect={handleSelect}>
+      <Nav.Link href="/">Home</Nav.Link>
+      <Nav.Link href="/gallery">Photo Gallery</Nav.Link>
+      <NavDropdown title="Activities" id="activities-nav-dropdown">
+        <NavDropdown.Item href="/saco-river">River Tubing</NavDropdown.Item>
+      </NavDropdown>
+      {/* <Nav.Link href="/reservations">Reservations</Nav.Link> */}
+      <Nav.Link href="/profile">Profile</Nav.Link>
+      <Nav.Link eventKey="logout">Logout</Nav.Link>
+    </Nav>
+  );
 
-    const LoadingIndicator = () => (
-        <ul className="list-none m-0 p-0 overflow-hidden flex">
-          <li className="flex-shrink-0">Loading...</li>
-        </ul>
-      );
+  const PublicRoutes = () => (
+    <Nav className="me-auto">
+      <Nav.Link href="/">Home</Nav.Link>
+      <NavDropdown title="Activities" id="activities-nav-dropdown">
+        <NavDropdown.Item href="/saco-river">River Tubing</NavDropdown.Item>
+      </NavDropdown>
+      <Nav.Link href="/login">Login</Nav.Link>
+    </Nav>
+  );
+
+  const LoadingIndicator = () => (
+    <div>Loading...</div>
+  );
 
   return (
-    <nav className="bg-black text-white bg-opacity-80 p-2">
-      {isLoading ? <LoadingIndicator /> :
-        isAdmin ? <AdminRoutes /> :
-        isGuest ? <GuestRoutes /> :
-        isLimitedGuest ? <LimitedGuestRoutes /> :
-        <PublicRoutes />
-      }
-    </nav>
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container >
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          {isLoading ? <LoadingIndicator /> :
+            isAdmin ? <AdminRoutes /> :
+            isGuest ? <GuestRoutes /> :
+            isLimitedGuest ? <LimitedGuestRoutes /> :
+            <PublicRoutes />
+          }
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default ResponsiveNavbar;

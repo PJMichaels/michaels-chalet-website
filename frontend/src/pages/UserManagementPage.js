@@ -1,3 +1,4 @@
+// src/pages/UserManagementPage.js
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import UsersTable from '../components/UsersTable';
@@ -5,19 +6,12 @@ import { fetchUserData } from '../utilities/api_funcs';
 import CreateUserForm from '../components/CreateUserForm';
 
 const UserManagementPage = () => {
-
-  // Add a create user button and form!!
-  // Add phone number and admin_note to user model!
-  // Use random hashes for all ids instead of a counter
-
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
-
-   // Function to fetch data from both APIs
-   const fetchData = async () => {
+  const fetchData = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -30,7 +24,6 @@ const UserManagementPage = () => {
     }
   };
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
   }, []);
@@ -41,23 +34,18 @@ const UserManagementPage = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    // setSelectedRow(null); // comment out to get rid of null error
     fetchData();
   };
-  
-  // If loading, show a loading message
-  if (loading) return <div>Loading...</div>;
 
-  // If there's an error, show an error message
+  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    
-    <div className='bg-black bg-opacity-80 p-4 m-8 rounded-sm shadow-lg'>
-      <h1 className='text-white text-2xl border-b-2'>User Management</h1>
-      <button 
-        onClick={() => handleCreateUser()}
-        className='float-right bg-blue-500 text-white py-1 px-4 m-2 rounded-lg hover:bg-blue-600 transition duration-300'
+    <div className='bg-black bg-opacity-80 p-4 sm:p-3 md:p-6 lg:p-8 m-8 rounded-lg shadow-lg'>
+      <h1 className='text-white text-2xl border-b-2 mb-0'>User Management</h1>
+      <button
+        onClick={handleCreateUser}
+        className='text-white bg-blue-500 hover:bg-blue-600 transition duration-300 rounded-lg my-3 py-1 w-full md:w-40 lg:w-40'
       >
         Add New User
       </button>
@@ -68,8 +56,7 @@ const UserManagementPage = () => {
         contentLabel="Create User"
         className='bg-none'
       >
-        <CreateUserForm closeModal = {closeModal}  />
-        {/* {selectedRow && <EditRequestForm requestObject={selectedRow} />} */}
+        <CreateUserForm closeModal={closeModal} />
       </Modal>
     </div>
   );

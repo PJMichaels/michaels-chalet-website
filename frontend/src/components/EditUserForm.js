@@ -42,7 +42,7 @@ const EditUserForm = ({userObject, closeModal}) => {
         <div className="max-w-xl mx-auto mt-11 p-4 bg-white shadow-md rounded-md">
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Editing User ID: {userObject.id}</label>
+                    <label className="block text-gray-700 text-sm font-bold mb-2">Editing User:</label>
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">Name:</label>

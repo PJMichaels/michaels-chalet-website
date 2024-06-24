@@ -52,7 +52,7 @@ const EditMyRequestForm = ({requestObject, closeModal}) => {
         // console.log("Placeholder for API call")
         // Patch API call for request change
         Axios.patch(`/api/myrequests/${requestObject.id}/`, {
-            "created_by": requestObject.created_by,
+            "created_by": requestObject.created_by.id,
             "booking": requestObject.booking,
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),

@@ -28,7 +28,7 @@ const Login = () => {
     };    
         
     return ( 
-        <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-md mx-auto my-10">
+        <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-sm lg:max-w-md mx-auto my-10">
             <form onSubmit={submit} className="space-y-6">
                 <h3 className='text-white text-2xl font-semibold'>Sign In</h3>
                 

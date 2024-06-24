@@ -115,7 +115,7 @@ export const postBookingChangeRequest = async (bookingObject, request_type) => {
   try {
     const response = await axios.post(`${BASE_URL}/myrequests/`, {
       "booking": bookingObject.id,
-      "created_by": bookingObject.created_by,
+      "created_by": bookingObject.created_by.id,
       "group_size": bookingObject.group_size,
       "arrival_date": bookingObject.arrival_date,
       "departure_date": bookingObject.departure_date,

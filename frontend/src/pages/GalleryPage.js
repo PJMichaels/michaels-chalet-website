@@ -1,7 +1,6 @@
-// src/pages/CarouselPage.js
+// src/pages/GalleryPage.js
 import React from 'react';
 import ImageCarousel from '../components/ImageCarousel';
-
 
 const imagePaths = [
   '../../Photos/gallery/KitchenTable1.jpg',
@@ -23,10 +22,8 @@ const imagePaths = [
 
 const GalleryPage = () => {
   return (
-    <div className='bg-black bg-opacity-80 p-4 m-8 h-[calc(100vh-6rem)] rounded-lg shadow-lg object-contain'>
-       {/* <div className="container mx-auto p-4"> */}
-        <ImageCarousel imagePaths={imagePaths} />
-      {/* </div> */}
+    <div className='bg-black bg-opacity-80 p-4 md:p-6 lg:p-8 sm:m-2 lg:m-8 h-[calc(100vh-6rem)] rounded-lg shadow-lg'>
+      <ImageCarousel imagePaths={imagePaths} />
     </div>
   );
 };

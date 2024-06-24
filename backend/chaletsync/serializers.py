@@ -83,16 +83,29 @@ class AvailabilitySerializer(serializers.ModelSerializer):
 
 
 class RequestSerializer(serializers.ModelSerializer):
+    created_by = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
+
     class Meta:
         model = Requests
         fields = '__all__'
 
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['created_by'] = UserProfileSerializer(instance.created_by).data
+        return response
+
 class AdminBookingsSerializer(serializers.ModelSerializer):
-    created_by = UserProfileSerializer()
+    created_by = serializers.PrimaryKeyRelatedField(queryset=UserProfile.objects.all())
 
     class Meta:
         model = Bookings
         fields = '__all__'
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['created_by'] = UserProfileSerializer(instance.created_by).data
+        return response
+
 
 class BookingsSerializer(serializers.ModelSerializer):
     
@@ -105,6 +118,7 @@ class BookingsSerializer(serializers.ModelSerializer):
         read_only_fields = [x for x in fields]
 
 class UserBookingsSerializer(serializers.ModelSerializer):
+    created_by = UserProfileSerializer()
     class Meta:
         model = Bookings
         fields = [

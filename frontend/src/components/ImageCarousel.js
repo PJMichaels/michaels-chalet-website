@@ -8,9 +8,9 @@ const ImageCarousel = ({ imagePaths }) => {
       <Carousel>
         {imagePaths.map((path, index) => (
           <Carousel.Item key={index} className="h-[calc(100vh-10rem)]">
-            <div className="flex justify-center items-center  h-full">
+            <div className="flex justify-center items-center h-full">
               <img
-                className="object-contain"
+                className="object-contain h-full max-w-full"
                 src={path}
                 alt={`Slide ${index}`}
               />

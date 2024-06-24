@@ -1,12 +1,10 @@
+// src/components/RequestForm.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-// import './BookingForm.css'
 
-
-const RequestForm = ({arrival_date, departure_date, refreshData}) => {
-    const {isLoading, userID, userName } = useAuth();
+const RequestForm = ({ arrival_date, departure_date, refreshData }) => {
+    const { isLoading, userID, userName } = useAuth();
     const [formData, setFormData] = useState({
         arrivalDate: arrival_date.toDateString(),
         departureDate: departure_date.toDateString(),
@@ -20,7 +18,7 @@ const RequestForm = ({arrival_date, departure_date, refreshData}) => {
             arrivalDate: arrival_date.toDateString(),
             departureDate: departure_date.toDateString(),
         }));
-    }, [arrival_date, departure_date]); // Update state when props change
+    }, [arrival_date, departure_date]);
 
     const handleChange = (e) => {
         setFormData({
@@ -34,24 +32,17 @@ const RequestForm = ({arrival_date, departure_date, refreshData}) => {
         let month = '' + (d.getMonth() + 1);
         let day = '' + d.getDate();
         const year = d.getFullYear();
-    
+
         if (month.length < 2) 
             month = '0' + month;
         if (day.length < 2) 
             day = '0' + day;
-    
+
         return [year, month, day].join('-');
     }
 
-const navigate = useNavigate();
-
-  const redirectToPage = () => {
-    navigate('/reservations/');}
-
     const handleSubmit = (e) => {
-        console.log(userID);
         e.preventDefault();
-        // Post booking request to Django backend
         Axios.post('/api/myrequests/', {
             "created_by": userID,
             "group_size": formData.groupSize,
@@ -65,38 +56,44 @@ const navigate = useNavigate();
                 refreshData();
             })
             .catch((error) => {
-                // This error should really be in a modal long term
                 console.error("An error occurred while posting data: ", error);
             });
     };
 
-    // If loading, show a loading message
     if (isLoading) return <div>Loading...</div>;
 
     return (
-        <div>
-         <form onSubmit={handleSubmit}>
-                <label>Guest Name: {userName}</label>
-                {/* <input type="text" name="createdBy" onChange={handleChange} required /> */}
-                <div>
-                    <label>Number of Guests: {formData.groupSize}</label><br></br>
-                    <input type="range" min='1' max='6' defaultValue='2' name="groupSize" onChange={handleChange} required />
+        <div className='p-4 sm:p-3 md:p-6 lg:p-8'>
+            <form onSubmit={handleSubmit}>
+                <label className='block mb-2'>Guest Name: {userName}</label>
+                <div className='mb-4'>
+                    <label className='block mb-2'>Number of Guests: {formData.groupSize}</label>
+                    <input 
+                        type="range" 
+                        min='1' 
+                        max='6' 
+                        defaultValue='2' 
+                        name="groupSize" 
+                        onChange={handleChange} 
+                        className='w-full' 
+                        required 
+                    />
                 </div>
-                <label>Request Message:</label><br></br>
+                <label className='block mb-2'>Request Message:</label>
                 <textarea 
                     name="requestMessage" 
                     onChange={handleChange} 
-                    className='text-black w-full m-2 p-2'
-                    required>
-                </textarea>
+                    className='text-black w-full p-2 mb-4' 
+                    required 
+                />
                 <button 
-                    type='submit'
-                    className= 'bg-blue-500 text-white w-full py-1 px-4 m-1 rounded-lg hover:bg-blue-600 transition duration-300'
+                    type='submit' 
+                    className='bg-blue-500 text-white w-full py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300'
                 >
                     Request Stay
                 </button>
-         </form>
-     </div>
+            </form>
+        </div>
     );
 };
 
