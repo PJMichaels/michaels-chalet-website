@@ -86,15 +86,6 @@ const handlePasswordSubmit = (e) => {
   
 };
 
-// const handlePasswordSubmit = async () => {
-//   try {
-//     await changeUserPassword(passwordData);
-//     setPasswordModalOpen(false);
-//   } catch (error) {
-//     console.error('Password change error', error);
-//   }
-// };
-
   const closeModal = () => {
     setProfileModalOpen(false);
     setPasswordModalOpen(false);
@@ -108,19 +99,19 @@ const handlePasswordSubmit = (e) => {
   if (error) return <div className="text-center text-red-500">Error: {error}</div>;
 
   return (
-    <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-2xl mx-auto my-10">
-      <h1 className="text-white text-2xl font-semibold mb-6 border-b-2 py-2">Profile Details:</h1>
-      <div className="space-y-4">
-        <div className="text-white text-lg">
+    <div className="bg-black bg-opacity-80 p-4 sm:p-6 lg:p-8 rounded-xl shadow-lg max-w-2xl mx-auto my-4 sm:my-8 lg:my-10">
+      <h1 className="text-white text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 border-b-2 py-2">Profile Details:</h1>
+      <div className="space-y-2 sm:space-y-4">
+        <div className="text-white text-base sm:text-lg">
           <span className="font-medium">Name:</span> {userData.name}
         </div>
-        <div className="text-white text-lg">
+        <div className="text-white text-base sm:text-lg">
           <span className="font-medium">Email:</span> {userData.email}
         </div>
-        <div className="text-white text-lg">
+        <div className="text-white text-base sm:text-lg">
           <span className="font-medium">Phone Number:</span> {userData.phone}
         </div>
-        <div className="space-x-4 mt-4">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4">
           <button 
             onClick={() => setProfileModalOpen(true)} 
             className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
@@ -129,7 +120,7 @@ const handlePasswordSubmit = (e) => {
           </button>
           <button 
             onClick={() => setPasswordModalOpen(true)} 
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition duration-300"
+            className="bg-teal-700 text-white py-2 px-4 rounded-lg hover:bg-teal-800 transition duration-300"
           >
             Change Password
           </button>
