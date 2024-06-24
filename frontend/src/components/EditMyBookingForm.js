@@ -53,7 +53,7 @@ const EditMyBookingForm = ({bookingObject, closeModal}) => {
         // Post booking request to Django backend
         // postBookingChangeRequest = (bookingObject, 'change')
         Axios.post(`/api/myrequests/`, {
-            "created_by": bookingObject.created_by,
+            "created_by": bookingObject.created_by.id,
             "booking": formData.id,
             "group_size": formData.groupSize,
             "arrival_date": formatDate(formData.arrivalDate),

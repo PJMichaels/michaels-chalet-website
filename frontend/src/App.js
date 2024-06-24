@@ -14,7 +14,7 @@ import ContactPage from './pages/ContactPage';
 import StayInfoPage from './pages/StayInfoPage';
 import Login from './components/Login';
 import Logout from './components/Logout';
-import Navbar from './components/Navbar';
+import ResponsiveNavbar from './components/Navbar';
 import Modal from 'react-modal';
 import {AdminRoute, GuestRoute} from './components/ProtectedRoutes';
 import {useAuth, AuthProvider} from './context/AuthContext'
@@ -63,7 +63,7 @@ function App() {
   return (
       <AuthProvider> {/* Provide the authentication context to the entire app */}
           <Router>
-              <Navbar /> {/* Navbar is placed here to be visible on all routes */}
+              <ResponsiveNavbar /> {/* Navbar is placed here to be visible on all routes */}
               <AppContent /> {/* Separated component to use useAuth hook */}
           </Router>
       </AuthProvider>

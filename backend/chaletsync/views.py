@@ -92,7 +92,20 @@ class MyBookingsView(viewsets.ModelViewSet):
     serializer_class = UserBookingsSerializer
     
     def get_queryset(self):
-        return Bookings.objects.filter(created_by=self.request.user)
+        queryset = Bookings.objects.filter(created_by=self.request.user)
+        today = date.today()
+        arrival_date = self.request.query_params.get('arrival_date', None)
+
+        if arrival_date == 'all':
+            return queryset
+        
+        elif arrival_date:
+            queryset = queryset.filter(arrival_date__gte=arrival_date)
+            
+        else:
+            queryset = queryset.filter(arrival_date__gte=today) | queryset.filter(departure_date__gte=today)
+
+        return queryset
 
 # view for admin to add/update/delete all availability
 class AvailabilityView(viewsets.ModelViewSet):
@@ -109,6 +122,9 @@ class AvailabilityView(viewsets.ModelViewSet):
 class RequestsView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser]
 
+    # queryset = Bookings.objects.all()
+    queryset = Requests.objects.select_related('created_by').all()
+
     serializer_class = RequestSerializer
     
     def get_queryset(self):
@@ -121,7 +137,7 @@ class MyRequestsView(viewsets.ModelViewSet):
     serializer_class = RequestSerializer
     
     def get_queryset(self):
-        return Requests.objects.filter(created_by=self.request.user)
+        return Requests.objects.filter(created_by=self.request.user).select_related('created_by')
         
 
 # keep iterating on models to make sure role level permissions are properly defined
