@@ -6,3 +6,6 @@ credentials.json
 backend/.env
 app-context.txt
 backend/chaletsync/migrations/*
+
+# Ignore all __pycache__ directories
+__pycache__/
