@@ -25,7 +25,7 @@ const CreateUserForm = ({closeModal}) => {
         if (formData.password && (formData.password === formData.checkPassword)) {
             // console.log('Passwords are equal and not null')
             Axios.post('/api/users/', {
-            'email': formData.email,
+            'email': formData.email.toLowerCase(),
             'name': formData.name,
             'phone': formData.phone,
             "groups": [formData.group],

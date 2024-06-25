@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
     // Provide a login function that updates the isLoggedIn state
     const login = async (email, password) => {
         try {
-            const { data } = await axios.post('/api/token/', { email, password });
+            const { data } = await axios.post('/api/token/', { email: email.toLowerCase(), password });
             localStorage.setItem('access_token', data.access);
             localStorage.setItem('refresh_token', data.refresh);
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;

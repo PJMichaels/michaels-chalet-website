@@ -22,7 +22,7 @@ const EditUserForm = ({userObject, closeModal}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         Axios.patch(`/api/users/${formData.id}/`, {
-            'email': formData.email,
+            'email': formData.email.toLowerCase(),
             'name' : formData.name,
             'phone': formData.phone,
             'groups': [formData.group],
