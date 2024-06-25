@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 
 const Login = () => {     
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');     
+    const [password, setPassword] = useState(''); 
+    const [error, setError] = useState('');    
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth(); // Use the useAuth hook to access your context
@@ -14,17 +15,22 @@ const Login = () => {
 
     // Create the submit method.
     const submit = async e => {
-        e.preventDefault();          
+        e.preventDefault();
+        setError('');          
 
         try {
-            // Use the login function from AuthContext
-            await auth.login(email, password);
-            // Navigate to the previous page or to the home page if no previous page is found
-            navigate(from, { replace: true });
+            // Convert email to lowercase before calling login
+            const success = await auth.login(email.toLowerCase(), password);
+            if (success) {
+                // Navigate to the previous page or to the home page if no previous page is found
+                navigate(from, { replace: true });
+            } else {
+                setError('Invalid email or password'); // Set the error message
+            }
         } catch (error) {
             console.error('Login error', error);
-            // Should have a displayed error if incorrect login
-        }    
+            setError('Invalid email or password'); // Set the error message
+        }     
     };    
         
     return ( 
@@ -57,6 +63,12 @@ const Login = () => {
                         onChange={e => setPassword(e.target.value)}
                     />
                 </div>
+
+                {error && (
+                    <div className="text-red-500 text-sm">
+                        {error}
+                    </div>
+                )}
                 
                 <button 
                     type="submit" 

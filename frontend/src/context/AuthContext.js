@@ -75,8 +75,10 @@ export const AuthProvider = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${data.access}`;
             setIsLoggedIn(true);
             decodeToken(data.access); // Decode token to update userGroups and userEmail
+            return true;
         } catch (error) {
             console.error('Login error', error);
+            return false;
         }
     };
 
