@@ -45,7 +45,7 @@ const CreateUserForm = ({closeModal}) => {
     };
 
     return (
-        <div className="max-w-xl mx-auto mt-11 p-4 bg-white shadow-md rounded-md">
+        <div className="max-w-xl mx-auto p-4 bg-white shadow-md rounded-md overflow-y-auto max-h-[90vh]">
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-lg font-bold mb-2">Create New User:</label>
