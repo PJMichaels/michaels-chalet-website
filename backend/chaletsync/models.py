@@ -33,6 +33,9 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    last_login = models.DateTimeField(null=True, blank=True)
+    login_count = models.PositiveIntegerField(default=0)
+
 
     objects = UserProfileManager()
 

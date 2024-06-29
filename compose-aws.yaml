@@ -4,7 +4,7 @@ services:
   backend:
     build: 
       context: ./backend
-      dockerfile: ./Dockerfile.prod
+      dockerfile: ./Dockerfile.aws
     ports:
       - "8000:8000"
     # add logging config for console output in AWS
