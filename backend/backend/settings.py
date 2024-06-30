@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
-    
+
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -96,24 +96,24 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Development database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # Production database - need to take out of this file
-# DATABASES = {
-#   'default': {
-#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#     'NAME': os.environ['DB_NAME'],
-#     'USER': os.environ['DB_USER'],
-#     'PASSWORD': os.environ['DB_PW'],
-#     'HOST': os.environ['DB_HOST'],
-#     'PORT': os.environ['DB_PORT'],
-#   }
-# }
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': os.environ['POSTGRES_DB'],
+    'USER': os.environ['POSTGRES_USER'],
+    'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+    'PORT': os.environ['POSTGRES_PORT'],
+    'HOST': os.environ['POSTGRES_HOST'],
+  }
+}
 
 # Added to faciliate a custom user model
 AUTH_USER_MODEL = 'chaletsync.UserProfile'
