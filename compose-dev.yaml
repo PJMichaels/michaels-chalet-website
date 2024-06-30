@@ -5,6 +5,7 @@ services:
     build: 
       context: ./backend
       dockerfile: ./Dockerfile.dev
+    container_name: michaels-chalet-backend
     volumes:
       - ./backend:/app
     ports:
@@ -18,15 +19,16 @@ services:
     
   db:
     image: postgres:latest
-    volumes:
-      - postgres_data_dev:/var/lib/postgresql/data
+    container_name: michaels-chalet-db
     env_file:
       - ./backend/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - dev-network
-  
+
 
 # not sure that the port configuration is correct for aws deployment
   # frontend-dev:
@@ -38,7 +40,7 @@ services:
   #   stdin_open: true
 
 volumes:
-  postgres_data_dev:
+  postgres_data:
 
 networks:
   dev-network:
