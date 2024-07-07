@@ -47,6 +47,18 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
     
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['email'] = user.email
+        token['name'] = user.name
+        token['groups'] = list(user.groups.values_list('name', flat=True))
+        return token
+    
+
+    
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 

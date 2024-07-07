@@ -1,20 +1,9 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from .models import UserProfile, Availability, Bookings, Requests
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+# from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from authentication.views import CustomTokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
-
-# customize token payload
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['email'] = user.email
-        token['name'] = user.name
-        token['groups'] = list(user.groups.values_list('name', flat=True))
-        return token
 
 
 # Serializer for users to manage their own profile
