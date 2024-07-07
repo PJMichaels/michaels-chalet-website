@@ -1,14 +1,19 @@
+import os
 from datetime import date
+import random
+import string
 from django.shortcuts import render
 from rest_framework import viewsets
-from django.contrib.auth.models import Group, User
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
 from .models import UserProfile, Bookings, Availability, Requests
+from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
+
 
 # view for admin add/update/delete users - not sure about passwords
 class UserViewSet(viewsets.ModelViewSet):
@@ -55,6 +60,87 @@ class PasswordChangeView(generics.UpdateAPIView):
         user.save()
         return Response({"status": "password set"}, status=status.HTTP_200_OK)
 
+
+# Ability for user to request new temporary password if email exists
+class CreateUserView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request):
+        name = request.data.get('name')
+        email = request.data.get('email')
+        phone = request.data.get('phone')
+        group_name = request.data.get('group')
+
+        # Check if the group exists
+        try:
+            group = Group.objects.get(name=group_name)
+        except Group.DoesNotExist:
+            return Response({'error': 'Group not found.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if the email is already used
+        if UserProfile.objects.filter(email=email).exists():
+            return Response({'error': 'Email already in use.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Generate a random password
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        hashed_password = make_password(password)
+        
+        # Create the new user
+        user = UserProfile.objects.create(
+            name=name,
+            email=email,
+            phone=phone,
+            password=hashed_password,
+        )
+
+        # Add the user to the group
+        user.groups.add(group)
+
+        # Email the user their account information
+        subject = 'Your New Account Information'
+        message = f'''
+        Welcome, {name}!
+        
+        Your account has been created successfully. Below are your account details:
+
+        Email: {email}
+        Password: {password}
+
+        Please change your password after logging in for the first time.
+
+        Sincerely,
+        Your Company Name
+        '''
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=os.getenv('EMAIL_HOST_USER'),
+            recipient_list=[email],
+        )
+        
+        return Response({'message': 'User created successfully.'}, status=status.HTTP_201_CREATED)
+
+# Ability for user to request new temporary password if email exists
+class PasswordResetView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        print("Attempting to check for email: " + str(email))
+        try:
+            user = UserProfile.objects.get(email=email)
+            print('Found user: ' + str(user))
+            new_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+            user.password = make_password(new_password)
+            user.save()
+
+            send_mail(
+                subject='Password Reset',
+                message=f'Your new password is: {new_password}',
+                from_email=os.getenv('EMAIL_HOST_USER'),
+                recipient_list=[email],
+            )
+            return Response({'message': 'Password reset successfully.'}, status=status.HTTP_200_OK)
+        except UserProfile.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 # view for admin to add/update/delete all bookings
 class BookingsView(viewsets.ModelViewSet):

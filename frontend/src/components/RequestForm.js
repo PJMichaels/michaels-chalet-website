@@ -11,6 +11,8 @@ const RequestForm = ({ arrival_date, departure_date, refreshData }) => {
         requestMessage: "",
         groupSize: "2",
     });
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         setFormData(formData => ({
@@ -41,23 +43,28 @@ const RequestForm = ({ arrival_date, departure_date, refreshData }) => {
         return [year, month, day].join('-');
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        Axios.post('/api/myrequests/', {
-            "created_by": userID,
-            "group_size": formData.groupSize,
-            "arrival_date": formatDate(formData.arrivalDate),
-            "departure_date": formatDate(formData.departureDate),
-            "request_message": formData.requestMessage,
-            "request_type": "new",
-        })
-            .then((response) => {
-                console.log(response.data);
-                refreshData();
-            })
-            .catch((error) => {
-                console.error("An error occurred while posting data: ", error);
+        setLoading(true);
+        setMessage('');
+        try {
+            const response = await Axios.post('/api/myrequests/', {
+                "created_by": userID,
+                "group_size": formData.groupSize,
+                "arrival_date": formatDate(formData.arrivalDate),
+                "departure_date": formatDate(formData.departureDate),
+                "request_message": formData.requestMessage,
+                "request_type": "new",
             });
+            console.log(response.data);
+            refreshData();
+            setMessage('Request submitted successfully.');
+        } catch (error) {
+            console.error("An error occurred while posting data: ", error);
+            setMessage('An error occurred while submitting the request.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (isLoading) return <div>Loading...</div>;
@@ -89,9 +96,15 @@ const RequestForm = ({ arrival_date, departure_date, refreshData }) => {
                 <button 
                     type='submit' 
                     className='bg-blue-500 text-white w-full py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300'
+                    disabled={loading}
                 >
-                    Request Stay
+                    {loading ? 'Requesting...' : 'Request Stay'}
                 </button>
+                {message && (
+                    <div className={`mt-4 text-sm ${message.includes('error') ? 'text-red-500' : 'text-green-500'}`}>
+                        {message}
+                    </div>
+                )}
             </form>
         </div>
     );

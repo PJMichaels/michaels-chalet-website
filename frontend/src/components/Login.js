@@ -1,39 +1,57 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ForgotPasswordModal from './ForgotPasswordModal'; // Adjust the path as needed
 
-const Login = () => {     
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(''); 
-    const [error, setError] = useState('');    
+    const [error, setError] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const auth = useAuth(); // Use the useAuth hook to access your context
+    const auth = useAuth();
 
-    // Extract the 'from' location from the state or default to the root
     const from = location.state?.from?.pathname || '/';
 
-    // Create the submit method.
-    const submit = async e => {
+    const submit = async (e) => {
         e.preventDefault();
-        setError('');          
+        setError('');
 
         try {
-            // Convert email to lowercase before calling login
             const success = await auth.login(email.toLowerCase(), password);
             if (success) {
-                // Navigate to the previous page or to the home page if no previous page is found
                 navigate(from, { replace: true });
             } else {
-                setError('Invalid email or password'); // Set the error message
+                setError('Invalid email or password');
             }
         } catch (error) {
             console.error('Login error', error);
-            setError('Invalid email or password'); // Set the error message
-        }     
-    };    
-        
-    return ( 
+            setError('Invalid email or password');
+        }
+    };
+
+    const handleForgotPassword = async (email) => {
+        try {
+            const response = await fetch('/api/password-reset/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                return 'Password reset email sent successfully.';
+            } else {
+                return data.error || 'An error occurred.';
+            }
+        } catch (error) {
+            return 'An error occurred.';
+        }
+    };
+
+    return (
         <div className="bg-black bg-opacity-80 p-8 rounded-xl shadow-lg max-w-sm lg:max-w-md mx-auto my-10">
             <form onSubmit={submit} className="space-y-6">
                 <h3 className='text-white text-2xl font-semibold'>Sign In</h3>
@@ -76,7 +94,21 @@ const Login = () => {
                 >
                     Submit
                 </button>
+
+                <button 
+                    type="button" 
+                    className="w-full mt-4 bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    Forgot Password
+                </button>
             </form>
+
+            <ForgotPasswordModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                onSubmit={handleForgotPassword}
+            />
         </div>
     );
 };

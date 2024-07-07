@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 
-const CreateUserForm = ({closeModal}) => {
-
-    // Should adapt username and email to be the same and remove option
+const CreateUserForm = ({ closeModal }) => {
     const [formData, setFormData] = useState({
-        email: null,
-        name: null,
-        phone: null,
-        group: "Guest",
-        password: null,
-        checkPassword: null,
+        email: '',
+        name: '',
+        phone: '',
+        group: 'Guest',
     });
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
     const handleChange = (e) => {
         setFormData({
@@ -20,28 +18,26 @@ const CreateUserForm = ({closeModal}) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (formData.password && (formData.password === formData.checkPassword)) {
-            // console.log('Passwords are equal and not null')
-            Axios.post('/api/users/', {
-            'email': formData.email.toLowerCase(),
-            'name': formData.name,
-            'phone': formData.phone,
-            "groups": [formData.group],
-            "password": formData.password,
-        })
-            .then((response) => {
-                console.log(response.data);
-                console.log('Created New User');
-                closeModal();
-            })
-            .catch((error) => {
-                // This error should really be in a modal long term
-                console.error("An error occurred while posting data: ", error);
+        setLoading(true);
+        setMessage('');
+        try {
+            const response = await Axios.post('/api/create-user/', {
+                email: formData.email.toLowerCase(),
+                name: formData.name,
+                phone: formData.phone,
+                group: formData.group,
             });
+            console.log(response.data);
+            setMessage('Created New User');
+            closeModal();
+        } catch (error) {
+            console.error("An error occurred while posting data: ", error);
+            setMessage('An error occurred while creating the user.');
+        } finally {
+            setLoading(false);
         }
-        
     };
 
     return (
@@ -54,7 +50,7 @@ const CreateUserForm = ({closeModal}) => {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Name:</label>
                     <input 
                         type="text" 
-                        defaultValue={formData.name} 
+                        value={formData.name} 
                         name="name" 
                         onChange={handleChange} 
                         required 
@@ -65,7 +61,7 @@ const CreateUserForm = ({closeModal}) => {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Email:</label>
                     <input 
                         type="email" 
-                        defaultValue={formData.email} 
+                        value={formData.email} 
                         name="email" 
                         onChange={handleChange} 
                         required 
@@ -76,7 +72,7 @@ const CreateUserForm = ({closeModal}) => {
                     <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number:</label>
                     <input 
                         type="text" 
-                        defaultValue={formData.phone} 
+                        value={formData.phone} 
                         name="phone" 
                         onChange={handleChange} 
                         required 
@@ -105,7 +101,7 @@ const CreateUserForm = ({closeModal}) => {
                                 value="Guest" 
                                 onChange={handleChange} 
                                 className="form-radio text-blue-500" 
-                                checked
+                                checked={formData.group === 'Guest'}
                             />
                             <span className="ml-2 text-gray-700">Guest</span>
                         </label>
@@ -122,38 +118,24 @@ const CreateUserForm = ({closeModal}) => {
                         </label>
                     </div>
                 </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Password:</label>
-                    <input 
-                        type="password" 
-                        name="password" 
-                        defaultValue={formData.password} 
-                        onChange={handleChange} 
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Re-Enter Password:</label>
-                    <input 
-                        type="password" 
-                        name="checkPassword" 
-                        defaultValue={formData.checkPassword} 
-                        onChange={handleChange} 
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                    />
-                </div>
                 <button 
                     type="submit" 
                     className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300 m-1"
+                    disabled={loading}
                 >
-                    Create User
+                    {loading ? 'Creating User...' : 'Create User'}
                 </button>
                 <button 
-                    onClick={() => closeModal()}
+                    onClick={closeModal}
                     className="w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300 m-1"
                 >
-                    Cancel
+                    Close
                 </button>
+                {message && (
+                    <div className={`mt-4 text-sm ${message.includes('error') ? 'text-red-500' : 'text-green-500'}`}>
+                        {message}
+                    </div>
+                )}
             </form>
         </div>
     );
