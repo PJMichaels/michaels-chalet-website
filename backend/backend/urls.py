@@ -44,4 +44,6 @@ urlpatterns = [
     path('api/logout/', authenticationviews.LogoutView.as_view(), name ='logout'),
     path('api/profile/', chaletsyncviews.UserProfileView.as_view(), name='user-profile'),
     path('api/profile/change-password/', chaletsyncviews.PasswordChangeView.as_view(), name='change-password'),
+    path('api/password-reset/', chaletsyncviews.PasswordResetView.as_view(), name='password-reset'),
+    path('api/create-user/', chaletsyncviews.CreateUserView.as_view(), name='create-user'),
 ]
