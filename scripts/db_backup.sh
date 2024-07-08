@@ -9,8 +9,8 @@ set +o allexport
 # Variables
 PROJECT_ROOT_PATH="/home/truejambles/Projects/michaels-chalet-website" # need to get this in a smarter way
 CONTAINER_NAME="michaels-chalet-db"
-USERNAME="$DB_USER"
-DATABASE_NAME="$DB_NAME"
+USERNAME="$POSTGRES_USER"
+DATABASE_NAME="$POSTGRES_DB"
 BACKUP_DIR="$PROJECT_ROOT_PATH/database/backups"
 BACKUP_FILE="$BACKUP_DIR/backup_$(date +%F).sql"
 
