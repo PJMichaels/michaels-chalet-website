@@ -5,7 +5,7 @@ const HomePage = () => {
     <div className='bg-black bg-opacity-80 p-4 m-4 md:m-8 h-full rounded-lg shadow-lg'>
       <div className='flex flex-col lg:flex-row'>
         <img 
-          src='../../Photos/static/home-page.jpg' 
+          src='../../Photos/static/StreetView1.jpg' 
           alt='Could not load'
           className='rounded-lg w-full lg:w-1/2'
         />
