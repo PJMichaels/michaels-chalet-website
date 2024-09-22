@@ -9,4 +9,4 @@ backend/chaletsync/migrations/*
 database/backups/
 
 # Ignore all __pycache__ directories
-__pycache__/
+**/__pycache__/**
