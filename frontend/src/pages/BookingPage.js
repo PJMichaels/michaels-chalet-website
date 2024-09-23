@@ -4,25 +4,24 @@ import 'react-calendar/dist/Calendar.css';
 import RequestForm from "../components/RequestForm";
 import BookingCalendar from "../components/BookingCalendar";
 import ReservationList from "../components/ReservationList";
-import { getAvailableDates } from "../utilities/calendarFuncs";
-import { fetchBookingsData, fetchProvisionedData } from '../utilities/api_funcs';
+import { getUnavailableDates } from "../utilities/calendarFuncs";
+import { fetchBookingsData, fetchBlockedDatesData } from '../utilities/api_funcs';
 import './Calendar.css';
 
 const BookingPage = () => {
     const [bookingData, setBookingData] = useState([]);
-    const [provisionedData, setProvisionedData] = useState([]);
+    const [blockedData, setBlockedData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedDates, setDates] = useState([new Date(), new Date()]);
-    const minDaysOut = 2; // temporary variable sets minimum days out for booking
 
     const fetchData = async () => {
         setLoading(true);
         setError(null);
         try {
-            const [bookingData, provisionedData] = await Promise.all([fetchBookingsData(), fetchProvisionedData()]);
+            const [bookingData, blockedData] = await Promise.all([fetchBookingsData(), fetchBlockedDatesData()]);
             setBookingData(bookingData);
-            setProvisionedData(provisionedData);
+            setBlockedData(blockedData);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -37,7 +36,7 @@ const BookingPage = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
-    const availableDates = getAvailableDates(provisionedData, bookingData, minDaysOut);
+    const unavailableDates = getUnavailableDates(blockedData, bookingData);
 
     const handleDateChange = newDates => {
         setDates(newDates);
@@ -51,7 +50,8 @@ const BookingPage = () => {
                 </div>
                 <div className='flex-1 bg-black bg-opacity-80 shadow-lg rounded-sm mx-2 my-2 p-2 md:p-6 lg:p-8'>
                     <BookingCalendar
-                        availableDates={availableDates}
+                        // availableDates={availableDates}
+                        unavailableDates={unavailableDates}
                         selectedDates={selectedDates}
                         handleDateChange={handleDateChange}
                     />
