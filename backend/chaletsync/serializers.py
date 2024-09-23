@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import UserProfile, Availability, Bookings, Requests
+from .models import UserProfile, Bookings, Requests, BlockedDates
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from authentication.views import CustomTokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
@@ -57,18 +57,18 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_new_password(self, value):
         validate_password(value)
         return value
-    
 
-class AdminAvailabilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Availability
-        fields = '__all__'
 
-class AvailabilitySerializer(serializers.ModelSerializer):
+class BlockedDatesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Availability
-        fields = ['start_date', 'end_date']
+        model = BlockedDates
+        fields = ['date']
         read_only_fields = [x for x in fields]
+
+class AdminBlockedDatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlockedDates
+        fields = '__all__'
 
 
 class RequestSerializer(serializers.ModelSerializer):

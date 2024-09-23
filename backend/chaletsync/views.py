@@ -10,7 +10,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .permissions import IsAdminUser, IsGuestUser, IsLimitedGuestUser
-from .models import UserProfile, Bookings, Availability, Requests
+from .models import UserProfile, Bookings, Requests,BlockedDates
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 
@@ -193,16 +193,18 @@ class MyBookingsView(viewsets.ModelViewSet):
 
         return queryset
 
-# view for admin to add/update/delete all availability
-class AvailabilityView(viewsets.ModelViewSet):
+    
+# view for admin to add/update/delete all blocked dates
+class BlockedDatesView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsAdminUser | IsGuestUser]
 
-    queryset = Availability.objects.all()
+    queryset = BlockedDates.objects.all()
 
     def get_serializer_class(self):
         if self.request.user.groups.filter(name='Admin').exists():
-            return AdminAvailabilitySerializer
-        return AvailabilitySerializer
+            return AdminBlockedDatesSerializer
+        return BlockedDatesSerializer
+    
 
 # view for admin to add/update/delete all requests
 class RequestsView(viewsets.ModelViewSet):
