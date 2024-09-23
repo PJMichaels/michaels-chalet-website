@@ -6,16 +6,15 @@ import axios from 'axios';
 const BASE_URL = '/api';
 
 
-// Function to fetch data from booking endpoint
-export const fetchProvisionedData = async () => {
+// Function to fetch data from blocked dates endpoint
+export const fetchBlockedDatesData = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/availability/`);
+    const response = await axios.get(`${BASE_URL}/blocked/`);
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
 
 // Function to fetch data from request endpoint
 export const fetchRequestsData = async () => {
@@ -108,7 +107,45 @@ export const fetchMyBookingsData = async () => {
     throw error;
   }
 };
+
+export const formatDate = (date) => {
+  const d = new Date(date);
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+  const year = d.getFullYear();
+
+  if (month.length < 2)
+      month = '0' + month;
+  if (day.length < 2)
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
   
+// Function to delete a blocked date from the blocked endpoint
+export const deleteBlockedDate = async (id) => {
+  // expects the blocked item id
+  try {
+    const response = await axios.delete(`/api/blocked/${id}/`);
+    return response.data;
+  } catch (error) {
+    console.error("An error occurred while deleting blocked date item: ", error);
+    throw error;
+  }
+}
+
+export const addBlockedDate = async (date) => {
+  // expects a new Date object as input
+  try {
+    const response = await axios.post('/api/blocked/', {
+      "date": formatDate(date),
+  })
+    return response.data;
+  } catch (error) {
+    console.error("An error occurred while creating new blocked date item: ", error);
+    throw error;
+  }
+}
 
 // Function to fetch data from booking endpoint
 export const postBookingChangeRequest = async (bookingObject, request_type) => {
