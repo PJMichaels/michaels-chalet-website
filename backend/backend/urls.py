@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 router = routers.DefaultRouter()
-router.register(r'availability', chaletsyncviews.AvailabilityView, 'availability')
+router.register(r'blocked', chaletsyncviews.BlockedDatesView, 'blocked')
 router.register(r'bookings', chaletsyncviews.BookingsView, 'bookings')
 router.register(r'mybookings', chaletsyncviews.MyBookingsView, 'mybookings')
 router.register(r'requests', chaletsyncviews.RequestsView, 'requests')
