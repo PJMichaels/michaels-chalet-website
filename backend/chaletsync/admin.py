@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import UserProfileCreationForm, UserProfileChangeForm
-from .models import UserProfile, Bookings, Availability
+from .models import UserProfile, Bookings, BlockedDates
 
 class UserProfileAdmin(UserAdmin):
     add_form = UserProfileCreationForm
@@ -23,8 +23,10 @@ class UserProfileAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
-class AvailabilityAdmin(admin.ModelAdmin):
-    list_display = ('reason', 'start_date', 'end_date')
+
+class BlockedDatesAdmin(admin.ModelAdmin):
+    list_display = ('date', 'reason')
+
 
 class BookingsAdmin(admin.ModelAdmin):
     list_display = (
@@ -47,6 +49,6 @@ class BookingsAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 
-admin.site.register(Availability, AvailabilityAdmin)
+admin.site.register(BlockedDates, BlockedDatesAdmin)
 
 admin.site.register(Bookings, BookingsAdmin)
