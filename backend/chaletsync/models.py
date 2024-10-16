@@ -75,8 +75,6 @@ class Bookings(models.Model):
 class BlockedDates(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField("Date", unique=True)
-    booking_id = models.ForeignKey(Bookings, on_delete=models.CASCADE, null=True)
-    reason = models.CharField(max_length=120, null=True)
     def __str__(self):
         return f"Blocked date: {self.date}"
 

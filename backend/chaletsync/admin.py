@@ -25,7 +25,7 @@ class UserProfileAdmin(UserAdmin):
 
 
 class BlockedDatesAdmin(admin.ModelAdmin):
-    list_display = ('date', 'reason')
+    list_display = ('date')
 
 
 class BookingsAdmin(admin.ModelAdmin):
