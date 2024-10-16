@@ -18,7 +18,7 @@ function ResponsiveNavbar() {
     <Nav className="me-auto text-white" onSelect={handleSelect}>
       <Nav.Link href="/">Home</Nav.Link>
       <NavDropdown title="Admin" id="admin-nav-dropdown">
-        <NavDropdown.Item href="/date-provisioning">Provision Dates</NavDropdown.Item>
+      <NavDropdown.Item href="/calendar-management">Manage Calendar</NavDropdown.Item>
         <NavDropdown.Item href="/reservation-management">Manage Bookings</NavDropdown.Item>
         <NavDropdown.Item href="/user-management">Manage Users</NavDropdown.Item>
       </NavDropdown>

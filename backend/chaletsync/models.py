@@ -45,18 +45,6 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
-class Availability(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    reason = models.CharField(max_length=120)
-    start_date = models.DateField("Start Date")
-    end_date = models.DateField("End Date")
-    # switch reason to note
-    # add created by
-
-    def _str_(self):
-        return self.title
-
 # add custom user model to make usernames = emails
 # add role??
 # make passwords optional for limited_guest so they can be created by
@@ -81,8 +69,15 @@ class Bookings(models.Model):
     # Collected_By
     # Collected_Date
 
-    def _str_(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
+    
+class BlockedDates(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    date = models.DateField("Date", unique=True)
+    def __str__(self):
+        return f"Blocked date: {self.date}"
+
 
 class Requests(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -112,8 +107,8 @@ class Requests(models.Model):
     ]
     request_type = models.CharField("Request Type", max_length=12, choices=request_choices)
 
-    def _str_(self):
-        return self.title 
+    # def __str__(self):
+    #     return self.title 
 
 
 # Booking_Guests Table

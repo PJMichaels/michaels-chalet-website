@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
-import AvailabilityPage from './pages/AvailabilityPage';
+import CalendarManagementPage from './pages/CalendarManagementPage';
 import BookingPage from './pages/BookingPage';
 import FloatPage from './pages/FloatPage';
 import GalleryPage from './pages/GalleryPage';
@@ -42,7 +42,6 @@ function AppContent() {
           <Route path="/login" element={<Login/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/booking" element={<BookingPage />} />
-          {/* <Route path="/date-provisioning" element={<AvailabilityPage />} /> */}
           <Route path="/saco-river" element={<FloatPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -51,7 +50,7 @@ function AppContent() {
 
           {/* <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} /> */}
           <Route path="/stayinfo" element={<GuestRoute><StayInfoPage /></GuestRoute>} />
-          <Route path="/date-provisioning" element={<AdminRoute><AvailabilityPage /></AdminRoute>} />
+          <Route path="/calendar-management" element={<AdminRoute><CalendarManagementPage /></AdminRoute>} />
           <Route path="/user-management" element={<AdminRoute><UserManagementPage /></AdminRoute>} />
           <Route path="/reservation-management" element={<AdminRoute><ReservationManagementPage /></AdminRoute>} />
           <Route path="/profile" element={<UserProfilePage />} />
