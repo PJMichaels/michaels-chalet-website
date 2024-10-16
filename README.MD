@@ -25,6 +25,7 @@ Front end must be started from frontend dir using:
 - Make sure when requesting to book, it checks that all dates in request are available, and prevents action if necessary.
 
 - Style calendars with tailwind...
+- Currently disabled dates text "color" is white, but this makes it hard to see. Should be gray. Competing with the blocked date colors.
 - Admin Calendar - disable past dates.
 - Set page text to configurable if admin - set maximum out date block for booking cal
 - Fix MVP unit tests since they use the availability model...
