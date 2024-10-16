@@ -23,6 +23,8 @@ const AdminCalendar = ({activeDates, blockedDates, bookedDates, handleDateChange
     //   : null
     // }
 
+    const today = new Date();
+
     // Define tileClassName function outside of the JSX
     const getTileClassName = ({ date, view }) => {
         if (view === "month") {
@@ -52,6 +54,7 @@ const AdminCalendar = ({activeDates, blockedDates, bookedDates, handleDateChange
                 onClickDay={handleDateChange}
                 // value={activeDates}
                 // tileDisabled={isDateDisabled}
+                minDate={today}
                 tileClassName={getTileClassName}
                 className='w-full'
             />
