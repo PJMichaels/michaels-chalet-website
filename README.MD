@@ -22,10 +22,14 @@ Front end must be started from frontend dir using:
 
 ## Next steps:
 - keep testing blocked dates approach now that provisioned dates has been depreciated and removed
+- Make sure when requesting to book, it checks that all dates in request are available, and prevents action if necessary.
+
 - Style calendars with tailwind...
+- Admin Calendar - disable past dates.
+- Set page text to configurable if admin - set maximum out date block for booking cal
 - Fix MVP unit tests since they use the availability model...
+- Update postman to remove availability links
 - If reason is provided when blocking dates, add that reason to the dates
-- Need to decide how best to view the "reason"
 - Add hover on calendar management page - if over booking, get booking info
 - Restyle bookings/blocked dates etc.. to look nicer
 - Take a closer look at timezones, I think there is a bug here that I am solving as though it is a zero index issue.
