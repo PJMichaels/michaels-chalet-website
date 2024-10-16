@@ -32,15 +32,15 @@ const AdminCalendar = ({activeDates, blockedDates, bookedDates, handleDateChange
 
           // Highlight active dates in blue
           if (activeDates.some((activeDate) => activeDate.toDateString() === date.toDateString())) {
-            return "bg-blue-500 text-white rounded-full"; // Tailwind for blue background and rounded circle
+            return "bg-blue-500 text-white rounded-lg"; // Tailwind for blue background and rounded circle
           }
           // Highlight blocked dates in gray
           if (blockedDates.some((blockedDate) => blockedDate.toDateString() === date.toDateString())) {
-            return "bg-gray-400 text-white rounded-full"; // Tailwind for gray background
+            return "bg-gray-400 text-white rounded-md"; // Tailwind for gray background
           }
           // Highlight booked dates in purple and disable them
           if (bookedDates.some((bookedDate) => bookedDate === date.toDateString())) {
-            return "bg-purple-500 text-white rounded-full opacity-60 pointer-events-none"; // Tailwind for purple background and disable interaction
+            return "bg-purple-500 text-white rounded-md opacity-60 pointer-events-none"; // Tailwind for purple background and disable interaction
           }
         }
         return null;
